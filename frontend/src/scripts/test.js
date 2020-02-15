@@ -2,7 +2,8 @@
 class Test {
 
     echo() {
-        console.log('TEST');
+        let socket = new WebSocket("ws://" + location.host + "/poker-endpoint/");
+        console.log(socket);
     }
 
 }

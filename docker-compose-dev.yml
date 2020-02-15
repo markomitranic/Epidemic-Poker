@@ -22,6 +22,25 @@ services:
     networks:
       - epidemicpoker
 
+  epidemicpoker_gs:
+    build:
+      target: dev
+      args:
+        - GS_XDEBUG_ACTIVE=${GS_XDEBUG_ACTIVE}
+        - GS_BLACKFIRE_ACTIVE=${GS_BLACKFIRE_ACTIVE}
+    volumes:
+      - ./gs/src:/app/epidemicpoker:delegated
+
+  blackfire-agent:
+    container_name: blackfire_agent
+    restart: "no"
+    image: blackfire/blackfire:1.29.0
+    environment:
+      BLACKFIRE_SERVER_ID: ${BLACKFIRE_SERVER_ID}
+      BLACKFIRE_SERVER_TOKEN: ${BLACKFIRE_SERVER_TOKEN}
+    networks:
+      - epidemicpoker
+
 volumes:
   epidemicpoker-frontend-build:
   epidemicpoker-frontend-node:

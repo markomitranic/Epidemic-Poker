@@ -13,6 +13,11 @@ services:
     networks:
       - epidemicpoker
 
+  epidemicpoker_gs:
+    container_name: epidemicpoker_gs
+    build:
+      context: ./gs
+      target: prod
 
 networks:
   epidemicpoker:
