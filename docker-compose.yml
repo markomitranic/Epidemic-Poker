@@ -1,6 +1,19 @@
 version: "3.7"
 
-#services:
+services:
+
+  epidemicpoker_gateway:
+    container_name: epidemicpoker_gateway
+    build:
+      context: ./gateway
+      target: prod
+    restart: always
+    command: [nginx-debug, '-g', 'daemon off;']
+    ports:
+      - 8080:8080
+    networks:
+      - epidemicpoker
+
 
 networks:
   epidemicpoker:
