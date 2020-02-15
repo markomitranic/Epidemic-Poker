@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+
+  epidemicpoker_gateway:
+    build:
+      target: base
+    volumes:
+      - epidemicpoker-frontend-build:/var/www/html/build:ro
+      - ./frontend/src/public:/var/www/html/public:ro
+
+  epidemicpoker_frontend:
+    container_name: epidemicpoker_frontend
+    image: epidemicpoker_frontend
+    volumes:
+      # Code
+      - ./frontend/src:/app/epidemicpoker:delegated
+      # Build Output
+      - epidemicpoker-frontend-build:/app/epidemicpoker/build
+      # Ignore Node Modules
+      - epidemicpoker-frontend-node:/app/epidemicpoker/node_modules
+    networks:
+      - epidemicpoker
+
+volumes:
+  epidemicpoker-frontend-build:
+  epidemicpoker-frontend-node:
