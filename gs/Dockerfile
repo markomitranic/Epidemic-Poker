@@ -34,7 +34,7 @@ RUN if [ "$GS_XDEBUG_ACTIVE" -eq 1 ] ; then \
         && docker-php-ext-enable xdebug \
         && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
         && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-        && echo "xdebug.remote_host=docker.host.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+        && echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
         && echo "xdebug.idekey=EPIDEMICPOKER-DEBUG" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     ; fi
 COPY entrypoint_dev.sh /app/entrypoint.sh
