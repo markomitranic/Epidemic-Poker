@@ -23,7 +23,7 @@ The project is a set of Docker containers, orchestrated via `docker-compose`. Ot
 ### Initial build
 The first thing to do is to copy and customize environment values in `.env.dist`. In the present setup ENV is used for secret management as well, although this can be extended with propper system if needed.
 
-With nothing out of the ordinary, a simple `docker-compose build && docker-compose up` should spin everything up. For ease of use, you can find two commands `./deploy_dev.sh` or `./deploy_prod.sh`.
+With nothing out of the ordinary, a simple `docker-compose build && docker-compose up` should spin everything up. For ease of use, i have attached a `./deploy.sh` script. Once up and running, the application is awailable at port 8080, and ready to be proxied further.
 
 ### Service Architecture
 TBA...
