@@ -8,5 +8,8 @@ use Ratchet\WebSocket\WsServer;
 require __DIR__ . '/vendor/autoload.php';
 
 $ws = new WsServer(new GSServer);
-$server = IoServer::factory(new HttpServer($ws), 8000);
+$server = IoServer::factory(
+    new HttpServer($ws),
+    getenv('LISTEN_PORT')
+);
 $server->run();
