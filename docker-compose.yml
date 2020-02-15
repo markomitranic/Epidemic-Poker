@@ -15,6 +15,7 @@ services:
 
   epidemicpoker_gs:
     container_name: epidemicpoker_gs
+    restart: always
     build:
       context: ./gs
       target: prod
