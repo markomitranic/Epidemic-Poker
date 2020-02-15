@@ -5,6 +5,7 @@ services:
   epidemicpoker_gateway:
     build:
       target: base
+#    command: [nginx-debug, '-g', 'daemon off;']
     volumes:
       - epidemicpoker-frontend-build:/var/www/html/build:ro
       - ./frontend/src/public:/var/www/html/public:ro
