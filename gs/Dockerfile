@@ -16,6 +16,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY conf/php.ini /usr/local/etc/php/conf.d/z-custom.ini
 EXPOSE 8000
 ENV LISTEN_PORT=8000
+ENV LOGGING_LEVEL=error
 WORKDIR /app/epidemicpoker/
 CMD ["php", "index.php"]
 

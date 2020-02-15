@@ -28,6 +28,8 @@ services:
       target: dev
       args:
         - GS_XDEBUG_ACTIVE=${GS_XDEBUG_ACTIVE}
+    environment:
+      - LOGGING_LEVEL=debug
     volumes:
       - ./gs/src:/app/epidemicpoker:delegated
 

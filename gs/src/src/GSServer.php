@@ -19,26 +19,27 @@ class GSServer implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn): void
     {
-        echo "New connection! ({$conn->resourceId})" . PHP_EOL;
+        Log::info("New connection!", ['client' => $conn->resourceId]);
         $this->clients->attach($conn);
+
         $conn->send('WELCOME new friend!');
     }
 
     public function onMessage(ConnectionInterface $from, $msg): void
     {
-        echo "Client says: $msg" . PHP_EOL;
+        Log::info("Incoming message from client.", ['client' => $from, 'message' => $msg]);
         $from->send($msg);
     }
 
     public function onClose(ConnectionInterface $conn): void
     {
+        Log::info("Client left.", ['client' => $conn->resourceId]);
         $this->clients->detach($conn);
-        echo "Client left.";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e): void
     {
-        printf($e);
+        Log::error("Error state.", ['exception' => $e, 'client' => $conn->resourceId]);
         $conn->close();
     }
 }
