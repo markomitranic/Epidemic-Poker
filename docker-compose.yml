@@ -18,6 +18,8 @@ services:
     build:
       context: ./gs
       target: prod
+    networks:
+      - epidemicpoker
 
 networks:
   epidemicpoker:

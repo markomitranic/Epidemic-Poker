@@ -5,8 +5,13 @@ USER root
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y --no-install-recommends \
     wget \
     git \
+    zip \
+    unzip \
+    libzip-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install zip \
+    && rm -rf /tmp/pear
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY conf/php.ini /usr/local/etc/php/conf.d/z-custom.ini
 EXPOSE 8000
