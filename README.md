@@ -25,9 +25,15 @@ The first thing to do is to copy and customize environment values in `.env.dist`
 
 With nothing out of the ordinary, a simple `docker-compose build && docker-compose up` should spin everything up. For ease of use, i have attached a `./deploy.sh` script. Once up and running, the application is awailable at port 8080, and ready to be proxied further.
 
-### Service Architecture
+## Service Architecture
 TBA...
 
 ### Scaling
-Since docker-compose does not support scaling or autoscaling anymore, the only way to scale the number of GS instances/shards is to duplicate the GS service blocks within the configuration. If you are omitting docker-compose in favor of using Docker CLI directly, you can spin up multiple shards manually, but you must add the appropriate and unique shard names to each one, via env vars. As a future prospect, a superpowered orchestrator like k8s or terraform can be implemented, and should be able to handle scaling without any changes to the codebase. 
+Since docker-compose does not support scaling or autoscaling anymore, the only way to scale the number of GS instances/shards is to duplicate the GS service blocks within the docker-compose configuration.
+If you are omitting docker-compose in favor of using Docker CLI directly, you can spin up multiple shards manually, but you must add the appropriate and unique shard names to each one, via `SHARD_NAME` vars. As a future prospect, a superpowered orchestrator like k8s or terraform can be implemented, and should be able to handle scaling without any changes to the codebase. 
 
+Additionally, in order for proxy to recognize the new services and load balance them, `gateway/shards-map.conf` must be edited with the same info.
+This can also be edited on-the-fly by manual changes to `/etc/nginx/conf.d/shards-map.conf` and reloading nginx conf `nginx -s reload` from within the container.
+
+At a later date, a more appropriate load balancer may be added easily, since nginx does not support hot ENV var replacement.
+Alternatively, `envsubst` may be used as a future prospect, if hot-scaling is not needed. 
