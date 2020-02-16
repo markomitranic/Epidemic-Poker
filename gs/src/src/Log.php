@@ -27,12 +27,12 @@ final class Log {
     protected static function configureInstance(): LoggerInterface
     {
         $logger = new Logger('log');
-        $logger->pushHandler(new StreamHandler(self::OUTPUT_STREAM, ));
+        $logger->pushHandler(new StreamHandler(self::OUTPUT_STREAM, self::getLoggingLevel()));
         self::$instance = $logger;
         return self::$instance;
     }
 
-    public static function getLoggingLevel(): string
+    public static function getLoggingLevel(): int
     {
         if (getenv('LOGGING_LEVEL') === 'debug') {
             return Logger::DEBUG;

@@ -3,8 +3,7 @@
 set -e
 
 composer install
-echo "[Composer install done] Starting a new GS at port 8000."
-
+echo "Composer install done."
 exec "$@"
 
 #Override, for testing purposes
