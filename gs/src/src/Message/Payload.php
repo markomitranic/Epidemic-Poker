@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Message\Payload;
+namespace App\Message;
 
 abstract class Payload implements \JsonSerializable
 {

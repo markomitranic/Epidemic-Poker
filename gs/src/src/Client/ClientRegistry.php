@@ -13,14 +13,7 @@ class ClientRegistry
      */
     private array $clients = [];
 
-    public function create(WsConnection $connection): Client
-    {
-        $client = new Client($connection);
-        $this->clients[$client->getId()] = $client;
-        return $client;
-    }
-
-    public function get(WsConnection $connection): Client
+    public function getOrCreate(WsConnection $connection): Client
     {
         if (array_key_exists($connection->getSessionId(), $this->clients)) {
             return $this->clients[$connection->getSessionId()];

@@ -31,7 +31,7 @@ TBA...
 ### Talk Protocol
 Talking protocol is based on tuples with the first member describing the name of the message (similar to route) and the second the body of the message.
 *GS says:*
-- `{'session', { 'token': (string) }}` A session token change has occured.
+- `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured.
 
 
 ### Scaling

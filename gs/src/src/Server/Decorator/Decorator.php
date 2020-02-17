@@ -20,7 +20,7 @@ abstract class Decorator implements Handler
         return $this->handler->onOpen($connection);
     }
 
-    public function onMessage(WsConnection $connection, string $message): WsConnection
+    public function onMessage(WsConnection $connection, array $message): WsConnection
     {
         return $this->handler->onMessage($connection, $message);
     }

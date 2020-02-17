@@ -14,7 +14,7 @@ class Log implements Handler
         return $connection;
     }
 
-    public function onMessage(WsConnection $connection, string $message): WsConnection
+    public function onMessage(WsConnection $connection, array $message): WsConnection
     {
         \App\Utility\Log::info("Incoming message from client.", ['client' => $connection->getRequest(), 'message' => $message]);
         return $connection;

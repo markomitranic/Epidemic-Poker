@@ -2,45 +2,39 @@
 
 namespace App\Server\Decorator;
 
-use App\Client\ClientRegistry;
+use App\Message\Handler as MessageHandler;
+use App\Message\NotFound\Message;
 use App\Server\Connection\WsConnection;
-use App\Utility\ConfigurationProvider;
 use Exception;
 
 class Routing extends Decorator
 {
 
-    private ClientRegistry $clientRegistry;
+    /**
+     * @var MessageHandler[]
+     */
+    private array $handlers;
 
-    public function __construct(Handler $handler, ClientRegistry $clientRegistry)
-    {
-        $this->clientRegistry = $clientRegistry;
+    public function __construct(
+        Handler $handler,
+        MessageHandler ...$messageHandlers
+    ) {
+        $this->handlers = $messageHandlers;
         parent::__construct($handler);
     }
 
-    public function onOpen(WsConnection $connection): WsConnection
+    public function onMessage(WsConnection $connection, array $message): WsConnection
     {
-        $client = $this->clientRegistry->get($connection);
+        foreach ($this->handlers as $handler) {
+            if ($handler::shouldHandle($message)) {
+                $handler->handle($connection, $message);
+                parent::onMessage($connection, $message);
+                return $connection;
+            }
+        }
 
-        $connection->getConnection()->send('WELCOME, friend!');
-        return parent::onOpen($connection);
-    }
-
-    public function onMessage(WsConnection $connection, string $message): WsConnection
-    {
-        $connection->getConnection()->send(sprintf(
-            'Pong: %s | Shard: %s | SessionID: %s',
-            $message,
-            ConfigurationProvider::get(ConfigurationProvider::SHARD_NAME),
-            $connection->getSessionId()
-        ));
-        return parent::onMessage($connection, $message);
-    }
-
-    public function onClose(WsConnection $connection): WsConnection
-    {
-        $connection->close();
-        return parent::onClose($connection);
+        $connection->send(new Message());
+        return $connection;
     }
 
     public function onError(WsConnection $connection, Exception $exception): WsConnection

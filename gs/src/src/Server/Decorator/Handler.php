@@ -10,7 +10,7 @@ interface Handler
 
     public function onOpen(WsConnection $connection): WsConnection;
 
-    public function onMessage(WsConnection $connection, string $message): WsConnection;
+    public function onMessage(WsConnection $connection, array $message): WsConnection;
 
     public function onClose(WsConnection $connection): WsConnection;
 

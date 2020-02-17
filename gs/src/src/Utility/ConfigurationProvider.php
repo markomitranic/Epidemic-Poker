@@ -13,6 +13,8 @@ abstract class ConfigurationProvider
     public const SHARD_NAME = 'SHARD_NAME';
     /** @var string  */
     public const LISTEN_PORT = 'LISTEN_PORT';
+    /** @var string  */
+    public const JWT_SECRET = 'JWT_SECRET';
 
     /**
      * @param string $key

@@ -2,8 +2,6 @@
 
 namespace App\Message;
 
-use App\Message\Payload\Payload;
-
 abstract class Message implements \JsonSerializable
 {
 

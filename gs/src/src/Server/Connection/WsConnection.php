@@ -2,6 +2,7 @@
 
 namespace App\Server\Connection;
 
+use App\Client\Client;
 use App\Message\Message;
 use Psr\Http\Message\RequestInterface;
 use Ratchet\ConnectionInterface;
@@ -12,6 +13,8 @@ class WsConnection
     private ?ConnectionInterface $connection = null;
 
     private ?string $sessionId = null;
+
+    private ?Client $client = null;
 
     public function getConnection(): ?ConnectionInterface
     {
@@ -44,6 +47,17 @@ class WsConnection
         return $this;
     }
 
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+        return $this;
+    }
+
     public function send(Message $message): self
     {
         $this->connection->send(json_encode($message));
@@ -53,6 +67,12 @@ class WsConnection
     public function close(): void
     {
         $this->connection->close();
+        $this->connection = null;
+        if (!is_null($this->getClient())) {
+            $this->getClient()->setConnection(null);
+        }
+        $this->client = null;
+        $this->sessionId = null;
     }
 
 }

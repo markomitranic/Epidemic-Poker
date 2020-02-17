@@ -21,6 +21,7 @@ services:
       target: prod
       args:
         - SHARD_NAME=1
+        - JWT_SECRET="super.super.secret"
     networks:
       - epidemicpoker
 

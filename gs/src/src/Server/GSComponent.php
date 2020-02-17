@@ -4,6 +4,7 @@ namespace App\Server;
 
 use App\Server\Connection\WsConnection;
 use App\Server\Decorator\Handler;
+use App\Utility\Log;
 use Exception;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
@@ -27,7 +28,7 @@ class GSComponent implements MessageComponentInterface {
     {
         $this->serverOperations->onMessage(
             $this->createTransientConnection($connection),
-            $message
+            $this->deserializeIncoming($message)
         );
     }
 
@@ -51,5 +52,21 @@ class GSComponent implements MessageComponentInterface {
         $wsConnection = new WsConnection();
         $wsConnection->setConnection($connection);
         return $wsConnection;
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    private function deserializeIncoming(string $data): array
+    {
+        try {
+            return json_decode($data, true, 512, JSON_THROW_ON_ERROR);
+        }catch (\Throwable $exception) {
+            Log::error(
+                'Unable to decypher the message. Not json.',
+                ['message' => $data, 'exception' => $exception]
+            );
+            return ['title' => '404', 'payload' => []];
+        }
     }
 }
