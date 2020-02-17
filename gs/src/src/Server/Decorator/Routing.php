@@ -5,29 +5,20 @@ namespace App\Server\Decorator;
 use App\Message\Handler as MessageHandler;
 use App\Message\NotFound\Message;
 use App\Server\Connection\WsConnection;
+use App\Server\RoutingTable;
 use Exception;
 
 class Routing extends Decorator
 {
 
-    /**
-     * @var MessageHandler[]
-     */
-    private array $handlers;
-
-    public function __construct(
-        Handler $handler,
-        MessageHandler ...$messageHandlers
-    ) {
-        $this->handlers = $messageHandlers;
-        parent::__construct($handler);
-    }
-
     public function onMessage(WsConnection $connection, array $message): WsConnection
     {
-        foreach ($this->handlers as $handler) {
-            if ($handler::shouldHandle($message)) {
-                $handler->handle($connection, $message);
+        /** @var MessageHandler $handlerClass */
+        foreach (RoutingTable::ROUTES as $handlerClass) {
+            if ($handlerClass::shouldHandle($message)) {
+                /** @var MessageHandler $handlerInstance */
+                $handlerInstance = new $handlerClass();
+                $handlerInstance->handle($connection, $message);
                 parent::onMessage($connection, $message);
                 return $connection;
             }

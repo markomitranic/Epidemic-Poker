@@ -15,12 +15,8 @@ abstract class ServerOperationsFactory
 
     public static function getServerOperations(): Handler
     {
-        $routeHandlers = [
-//            new \App\Message\Auth\Handler()
-        ];
-
         $serverOperations = new Log();
-        $serverOperations = new Routing($serverOperations, ...$routeHandlers);
+        $serverOperations = new Routing($serverOperations);
         $serverOperations = new Session($serverOperations, new ClientRegistry(), SessionProviderFactory::get(), new WsConnectionRegistry());
         return $serverOperations;
     }
