@@ -19,6 +19,8 @@ services:
     build:
       context: ./gs
       target: prod
+      args:
+        - SHARD_NAME=1
     networks:
       - epidemicpoker
 

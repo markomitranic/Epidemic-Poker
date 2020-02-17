@@ -2,7 +2,9 @@
   "require": {
     "php": "^7.4",
     "cboden/ratchet": "^0.4.2",
-    "monolog/monolog": "^2.0"
+    "monolog/monolog": "^2.0",
+    "firebase/php-jwt": "^5.0",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {
