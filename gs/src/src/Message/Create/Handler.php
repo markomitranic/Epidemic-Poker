@@ -2,7 +2,6 @@
 
 namespace App\Message\Create;
 
-use App\Message\Created\Message as RoomCreatedMessage;
 use App\Message\Error;
 use App\Message\ErrorMessage\Message as ErrorMessage;
 use App\Message\InitialState\Message as InitialStateMessage;
@@ -39,7 +38,6 @@ class Handler implements \App\Message\Handler
             $room = $this->rooms->create($payload->getType());
             $room->join($connection->getClient());
 
-            $connection->send(new RoomCreatedMessage($room->getName()));
             $connection->send(new InitialStateMessage($room->getName()));
         } catch (\Exception $e) {
             Log::error(Error::message(Error::ERROR_CREATING_ROOM), ['originalMessage' => $data, 'exception' => $e]);

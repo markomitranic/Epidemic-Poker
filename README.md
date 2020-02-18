@@ -35,7 +35,6 @@ Talking protocol is based on tuples with the first member describing the name of
 - `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured.
 - `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
 - `{title:'initialState', payload: { 'roomId': (string), 'configuration': (array), 'results': (array) }}` Sent after the client joins a room.
-- `{title:'created', payload: { 'roomId': (string) }}` Sent after the client joins a room.
 
 *Client says:*
 - `{title:'create', payload: { 'type': (string) }}` Create a new room.
