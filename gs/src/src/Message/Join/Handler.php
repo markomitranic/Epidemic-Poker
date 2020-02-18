@@ -43,4 +43,14 @@ class Handler implements \App\Message\Handler
         }
         return false;
     }
+
+    /**
+     * @param array $data
+     * @return Message
+     * @throws \Throwable
+     */
+    private function convertData(array $data): Message
+    {
+        return (new Transformer())->hydrate($data);
+    }
 }
