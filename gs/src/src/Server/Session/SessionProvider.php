@@ -2,17 +2,16 @@
 
 namespace App\Server\Session;
 
-use App\Message\SessionChange;
 use App\Server\Connection\WsConnection;
 use App\Server\Session\IdResolver\Resolver;
 use App\Server\Session\IdResolver\UniqidResolver;
-use App\Server\Session\Writer\IssueObserver;
+use App\Server\Session\Writer\ExistingSession;
+use App\Server\Session\Writer\NewSession;
+use App\Utility\Log;
 use Exception;
 
 class SessionProvider
 {
-
-    private IssueObserver $sessionIssueObserver;
 
     /**
      * @var Resolver[]
@@ -22,10 +21,8 @@ class SessionProvider
     private Resolver $newSessionIdResolver;
 
     public function __construct(
-        IssueObserver $sessionIssueObserver,
         Resolver ...$idResolvers
     ) {
-        $this->sessionIssueObserver = $sessionIssueObserver;
         $this->idResolver = $idResolvers;
         $this->newSessionIdResolver = new UniqidResolver();
     }
@@ -37,14 +34,20 @@ class SessionProvider
     {
         foreach ($this->idResolver as $resolver) {
             try {
-                return $resolver->getSessionId($connection);
-            } catch (\Throwable $e) {
+                $sessionId = $resolver->getSessionId($connection);
+                if ($connection->isFreshConnection()) {
+                    (new ExistingSession())->handle($connection, $sessionId);
+                }
+                return $sessionId;
+            } catch (\Exception $e) {
                 continue;
+            } catch (\Throwable $exception) {
+                Log::error('Unable to discern the session due to error.', ['exception' => $exception]);
             }
         }
 
         $sessionId = $this->newSessionIdResolver->getSessionId($connection);
-        $this->sessionIssueObserver->handle($connection, $sessionId);
+        (new NewSession())->handle($connection, $sessionId);
 
         return $sessionId;
     }

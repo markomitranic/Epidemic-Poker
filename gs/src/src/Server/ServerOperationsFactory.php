@@ -34,8 +34,8 @@ class ServerOperationsFactory
         $serverOperations = new BaseHandler();
         $serverOperations = new Routing($serverOperations, $this->routingTable);
         $serverOperations = new Client($serverOperations, $this->clientRegistry);
-        $serverOperations = new Connection($serverOperations, $this->connectionRegistry);
         $serverOperations = new Session($serverOperations, SessionProviderFactory::get());
+        $serverOperations = new Connection($serverOperations, $this->connectionRegistry);
         $serverOperations = new Log($serverOperations);
         return $serverOperations;
     }

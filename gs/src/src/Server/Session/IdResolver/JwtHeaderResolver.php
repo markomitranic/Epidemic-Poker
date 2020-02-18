@@ -3,7 +3,7 @@
 namespace App\Server\Session\IdResolver;
 
 use App\Server\Connection\WsConnection;
-use App\Server\Session\Writer\JwtIssueObserver;
+use App\Server\Session\Writer\NewSession;
 use App\Utility\ConfigurationProvider;
 use Exception;
 use Firebase\JWT\JWT;
@@ -30,8 +30,8 @@ final class JwtHeaderResolver implements Resolver
     public function getSessionId(WsConnection $connection): string
     {
         $jwt = $this->findShardCookie($connection);
-        $decoded = JWT::decode($jwt, $this->key, [JwtIssueObserver::ALGO_HS256]);
-        return $decoded['sub'];
+        $decoded = JWT::decode($jwt, $this->key, [NewSession::ALGO_HS256]);
+        return $decoded->sub;
     }
 
     private function findShardCookie(WsConnection $connection): string {

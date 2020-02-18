@@ -21,12 +21,20 @@ final class Connection extends Decorator
 
     public function onOpen(WsConnection $connection): WsConnection
     {
-        return parent::onOpen($this->connectionRegistry->getConnection($connection));
+        try {
+            return parent::onOpen($this->connectionRegistry->get($connection));
+        } catch (\Exception $e) {
+            return parent::onOpen($this->connectionRegistry->create($connection));
+        }
     }
 
     public function onMessage(WsConnection $connection, array $message): WsConnection
     {
-        return parent::onMessage($this->connectionRegistry->getConnection($connection), $message);
+        try {
+            return parent::onMessage($this->connectionRegistry->get($connection), $message);
+        } catch (\Exception $e) {
+            return parent::onOpen($this->connectionRegistry->create($connection));
+        }
     }
 
     public function onError(WsConnection $connection, Exception $exception): WsConnection

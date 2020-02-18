@@ -16,6 +16,8 @@ class WsConnection
 
     private ?Client $client = null;
 
+    private bool $freshConnection = true;
+
     public function getConnection(): ?ConnectionInterface
     {
         return $this->connection;
@@ -55,6 +57,17 @@ class WsConnection
     public function setClient(?Client $client): self
     {
         $this->client = $client;
+        return $this;
+    }
+
+    public function isFreshConnection(): bool
+    {
+        return $this->freshConnection;
+    }
+
+    public function setFreshConnection(bool $isFresh): self
+    {
+        $this->freshConnection = $isFresh;
         return $this;
     }
 

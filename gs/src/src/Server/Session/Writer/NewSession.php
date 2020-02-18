@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use \Firebase\JWT\JWT;
 use App\Server\Connection\WsConnection;
 
-class JwtIssueObserver implements IssueObserver
+class NewSession implements IssueObserver
 {
 
     /** @var string  */
