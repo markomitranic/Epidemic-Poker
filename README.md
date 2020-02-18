@@ -34,8 +34,10 @@ Talking protocol is based on tuples with the first member describing the name of
 *GS says:*
 - `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured.
 - `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
+- `{title:'initialState', payload: { 'roomId': (string), 'configuration': (array), 'results': (array) }}` Sent after the client joins a room.
 
 *Client says:*
+- `{title:'create', payload: { 'configuration': (array) }}` Create a new room.
 - `{title:'join', payload: { 'roomId': (string) }}` Ask to join a specific room.
 
 ### Scaling

@@ -4,6 +4,7 @@ namespace App\Message\Join;
 
 use App\Message\Error;
 use App\Message\ErrorMessage\Message as NotFoundMessage;
+use App\Message\InitialState\Message as InitialStateMessage;
 use App\Room\RoomRegistry;
 use App\Server\Connection\WsConnection;
 use App\Utility\Log;
@@ -36,6 +37,7 @@ class Handler implements \App\Message\Handler
         try {
             $room = $this->rooms->getByName($payload->getRoomId());
             $room->join($connection->getClient());
+            $connection->send(new InitialStateMessage($room->getName()));
         } catch (\Exception $e) {
             Log::error(Error::message(Error::NO_ROOM), ['originalMessage' => $data, 'exception' => $e]);
             $connection->send(new NotFoundMessage($data, Error::NO_ROOM));
