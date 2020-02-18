@@ -7,6 +7,7 @@ class Connection {
 
     constructor(serverName) {
         this.serverName = serverName;
+        this.openEvent = null;
         this.observers = {
             open: [],
             message: [],
@@ -18,7 +19,8 @@ class Connection {
         this.socket.connection = this;
 
         this.socket.onopen = function (event) {
-            this.connection.triggerObservers('open', event);
+            this.connection.openEvent = event;
+            console.info('Connection to server open, waiting for auth.');
         };
         this.socket.onmessage = function (event) {
             this.connection.triggerObservers('message', JSON.parse(event.data));
@@ -30,7 +32,9 @@ class Connection {
             this.connection.triggerObservers('error', event);
         };
 
-        this.onMessage(this.sessionChange);
+        this.onMessage((data) => {
+            this.sessionChange(data, this);
+        });
         this.onError(function(e) {
            new ErrorMessage('Unable to connect to server.');
         });
@@ -78,6 +82,9 @@ class Connection {
         if (data.title === 'sessionChange') {
             Cookie.create(data.payload.cookieName, data.payload.token, 1);
             console.debug('Received a session change request.', data.payload);
+            this.triggerObservers('open', this.openEvent);
+        } else if (data.title === 'authSuccess') {
+            this.triggerObservers('open', this.openEvent);
         }
     }
 
