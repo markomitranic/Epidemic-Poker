@@ -5,6 +5,7 @@ namespace App\Server;
 use App\Client\ClientRegistry;
 use App\Room\RoomRegistry;
 use App\Server\Connection\WsConnectionRegistry;
+use App\Server\Decorator\BaseHandler;
 use App\Server\Decorator\Handler;
 use App\Server\Decorator\Log;
 use App\Server\Decorator\Routing;
@@ -28,7 +29,7 @@ class ServerOperationsFactory
 
     public function getServerOperations(): Handler
     {
-        $serverOperations = new Log();
+        $serverOperations = new BaseHandler();
         $serverOperations = new Routing($serverOperations, $this->routingTable);
         $serverOperations = new Session(
             $serverOperations,
@@ -36,6 +37,7 @@ class ServerOperationsFactory
             SessionProviderFactory::get(),
             $this->connectionRegistry
         );
+        $serverOperations = new Log($serverOperations);
         return $serverOperations;
     }
 
