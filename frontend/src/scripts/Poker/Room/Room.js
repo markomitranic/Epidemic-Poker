@@ -8,7 +8,7 @@ class Room {
         this.name = name;
         this.connection = connection;
 
-        this.connection.onOpen(this.joinRoom, this);
+        this.connection.onOpen(this.join, this);
         this.connection.onMessage(this.messageListener, this);
     }
 
@@ -16,7 +16,7 @@ class Room {
         console.log('got message here', data);
     }
 
-    joinRoom(data, context) {
+    join(data, context) {
         context.connection.send(new Message('join', {roomId: this.name}));
     }
 
