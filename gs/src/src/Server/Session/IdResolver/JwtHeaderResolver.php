@@ -3,8 +3,10 @@
 namespace App\Server\Session\IdResolver;
 
 use App\Server\Connection\WsConnection;
+use App\Server\Session\Writer\JwtIssueObserver;
 use App\Utility\ConfigurationProvider;
 use Exception;
+use Firebase\JWT\JWT;
 use function GuzzleHttp\Psr7\parse_header;
 
 final class JwtHeaderResolver implements Resolver
@@ -27,7 +29,12 @@ final class JwtHeaderResolver implements Resolver
      */
     public function getSessionId(WsConnection $connection): string
     {
+        $jwt = $this->findShardCookie($connection);
+        $decoded = JWT::decode($jwt, $this->key, [JwtIssueObserver::ALGO_HS256]);
+        return $decoded['sub'];
+    }
 
+    private function findShardCookie(WsConnection $connection): string {
         $cookiesHeader = $connection->getRequest()->getHeader('Cookie');
         if(count($cookiesHeader)) {
             $cookies = parse_header($cookiesHeader)[0];
@@ -35,15 +42,6 @@ final class JwtHeaderResolver implements Resolver
                 return $cookies[$this->sessionCookieName];
             }
         }
-
-//        $decoded = JWT::decode(
-//            $message->getPayload()->getToken(),
-//            $this->key, [JwtIssueObserver::ALGO_HS256]
-//        );
-//        print_r($decoded);
-
-//        return $decoded['token'];
-
         throw new Exception('The request does not provide a valid sessionId');
     }
 
