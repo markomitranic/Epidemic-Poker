@@ -23,7 +23,6 @@ class RoutingTable
 
     public function getHandler(string $handlerName): Handler
     {
-        var_dump(self::ROUTES[$handlerName]);
         return $this->{self::ROUTES[$handlerName]}();
     }
 
