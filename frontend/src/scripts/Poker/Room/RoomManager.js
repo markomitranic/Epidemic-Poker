@@ -12,16 +12,16 @@ class RoomManager {
 
     join(serverName, roomName) {
         const connection = this.connectionManager.getConnection(serverName);
-        connection.onClose(this.connectionClose);
+        connection.onClose(this.connectionClose, this);
 
         this.rooms[roomName] = new Room(roomName, connection);
         return this.rooms[roomName];
     }
 
-    connectionClose(connection) {
-        this.rooms.forEach(function (room) {
-            if (room.connection === connection) {
-                delete this.rooms[room.name];
+    connectionClose(connection, context) {
+        Object.keys(context.rooms).forEach(function (key) {
+            if (context.rooms[key].connection === connection) {
+                delete context.rooms[key];
             }
         });
     }
