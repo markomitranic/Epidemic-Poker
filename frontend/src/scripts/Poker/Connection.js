@@ -23,6 +23,7 @@ class Connection {
             console.info('Connection to server open, waiting for auth.');
         };
         this.socket.onmessage = function (event) {
+            this.connection.triggerObservers('open', JSON.parse(event.data));
             this.connection.triggerObservers('message', JSON.parse(event.data));
         };
         this.socket.onclose = function (event) {
@@ -49,7 +50,11 @@ class Connection {
         this.addObserver('message', observer, context);
     }
     onOpen(observer, context) {
-        this.addObserver('open', observer, context);
+        if (this.openEvent === null) {
+            this.addObserver('open', observer, context);
+            return;
+        }
+        observer(this.openEvent, context);
     }
     onClose(observer, context) {
         this.addObserver('close', observer, context);
@@ -71,11 +76,24 @@ class Connection {
         });
     }
 
+    removeObserver(collectionName, observer) {
+        this.observers[collectionName].forEach((existingObserver, key) => {
+            if (Object.is(existingObserver, observer)) {
+                delete this.observers[key];
+            }
+        });
+    }
+
     triggerObservers(collectionName, event) {
         console.debug(collectionName, event);
-        this.observers[collectionName].forEach(function (observer) {
+        this.observers[collectionName].forEach((observer) => {
             observer.observer(event, observer.context);
         });
+
+        if (collectionName === 'open') {
+            // Open should always be emptied after use, because it is used as a queue.
+            this.observers.open = [];
+        }
     }
 
     sessionChange(data) {
