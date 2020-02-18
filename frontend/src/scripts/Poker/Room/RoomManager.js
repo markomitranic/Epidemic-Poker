@@ -18,6 +18,10 @@ class RoomManager {
         return this.rooms[roomName];
     }
 
+    create(callback) {
+        this.connectionManager.getNewConnection(callback);
+    }
+
     connectionClose(connection, context) {
         Object.keys(context.rooms).forEach(function (key) {
             if (context.rooms[key].connection === connection) {
