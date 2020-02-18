@@ -23,12 +23,12 @@ final class RoomRegistry
         throw new \Exception('No existing rooms found.');
     }
 
-    public function create(): Room
+    public function create(string $type): Room
     {
         $faker = Factory::create();
 
         do {
-            $name = $faker->firstName();
+            $name = strtolower($faker->firstName());
         } while ($this->nameInUse($name));
 
         $this->rooms[$name] = new Room($name);
