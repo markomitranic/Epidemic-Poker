@@ -68,7 +68,7 @@ class Connection {
     }
 
     triggerObservers(collectionName, event) {
-        console.debug('open', event);
+        console.debug(collectionName, event);
         this.observers[collectionName].forEach(function (observer) {
             observer.observer(event, observer.context);
         });
