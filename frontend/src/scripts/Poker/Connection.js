@@ -27,9 +27,13 @@ class Connection {
             this.connection.triggerObservers('message', JSON.parse(event.data));
         };
         this.socket.onclose = function (event) {
+            if (!event.wasClean) {
+                new ErrorMessage('Uh oh! Server dropped the connection. Try re-joining a room or reloading the page.')
+            }
             this.connection.triggerObservers('close', this.connection);
         };
         this.socket.onerror = function (event) {
+            console.error('eror');
             this.connection.triggerObservers('error', event);
         };
 
@@ -44,6 +48,9 @@ class Connection {
     send(message) {
         console.debug('Sending message', message);
         this.socket.send(JSON.stringify(message));
+    }
+    close(code = 1000, message = 'Bye bye.') {
+        this.socket.close(code, message);
     }
 
     onMessage(observer, context) {
