@@ -1,6 +1,7 @@
 "use strict";
 
 import Cookie from "../Cookie";
+import ErrorMessage from "../Panels/ErrorMessage";
 
 class Connection {
 
@@ -30,6 +31,9 @@ class Connection {
         };
 
         this.onMessage(this.sessionChange);
+        this.onError(function(e) {
+           new ErrorMessage('Unable to connect to server.');
+        });
     }
 
     send(message) {
