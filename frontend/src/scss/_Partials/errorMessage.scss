@@ -1,0 +1,29 @@
+#error-message {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #af2020;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  color: white;
+  z-index: 15;
+  transform: translateY(100%);
+  transition: 0.2s transform ease-in-out;
+
+  &.visible {
+    transform: translateY(0);
+  }
+
+  .message {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .close-button {
+    font-size: 20px;
+    margin: 5px 5px 5px 20px;
+  }
+}

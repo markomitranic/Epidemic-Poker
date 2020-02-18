@@ -1,9 +1,9 @@
-// Global Variables
-$assetPath: '/';
+// Variable swatches
+@import "colorWheel";
 
-body {
-  background-color: teal!important;
-}
-
-// Various Parent Fixes
-//@import "_Parent/main";
+// Domain
+@import "global";
+@import "_Partials/errorMessage";
+@import "_Partials/popup";
+@import "_Partials/joinPopup";
+@import "navigation";

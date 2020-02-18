@@ -1,0 +1,50 @@
+#navigation-panel {
+  display: block;
+  position: fixed;
+  z-index: 10;
+  color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: calc(100% - 100px);
+  background: $seaBlue;
+  transform: translateY(-100%);
+  transition: 0.2s transform ease-in-out;
+
+  &.visible {
+    transform: translateY(0);
+
+    .toggle-button {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    li {
+
+    }
+  }
+  .toggle-button {
+    position: absolute;
+    bottom: -60px;
+    right: -60px;
+    background: $seaBlue;
+    padding: 0;
+    border-radius: 50%;
+    min-width: 120px;
+    min-height: 120px;
+
+    svg {
+      position: absolute;
+      bottom: 25px;
+      left: 30px;
+      color: white;
+      font-size: 20px;
+      transition: 0.2s transform ease-in-out;
+    }
+  }
+}

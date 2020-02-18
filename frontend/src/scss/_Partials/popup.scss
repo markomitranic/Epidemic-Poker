@@ -1,0 +1,19 @@
+.fullscreen-popup {
+    display: none;
+    position: fixed;
+    background: $mayaBlue;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    width: 100%;
+    height: 80%;
+    z-index: 11;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 9px #00000070;
+
+    &.visible {
+        display: block;
+    }
+}
