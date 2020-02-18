@@ -14,19 +14,19 @@ class Connection {
         };
 
         this.socket = new WebSocket(`ws://${location.host}/poker-entrypoint/${serverName}`);
-        this.socket.connectionManager = this;
+        this.socket.connection = this;
 
         this.socket.onopen = function (event) {
-            this.connectionManager.triggerObservers('open', event);
+            this.connection.triggerObservers('open', event);
         };
         this.socket.onmessage = function (event) {
-            this.connectionManager.triggerObservers('message', JSON.parse(event.data));
+            this.connection.triggerObservers('message', JSON.parse(event.data));
         };
         this.socket.onclose = function (event) {
-            this.connectionManager.triggerObservers('close', event);
+            this.connection.triggerObservers('close', this.connection);
         };
         this.socket.onerror = function (event) {
-            this.connectionManager.triggerObservers('error', event);
+            this.connection.triggerObservers('error', event);
         };
 
         this.onMessage(this.sessionChange);
