@@ -32,7 +32,8 @@ TBA...
 Talking protocol is based on tuples with the first member describing the name of the message (similar to route) and the second the body of the message.
 
 *GS says:*
-- `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured.
+- `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured. This happens only once per connection and server the purpose to prevent auth race conditions.
+- `{title:'authSuccess', payload: { 'cookieName': (string) }}` An existing session is authentificated. This happens instead of `sessionChange` if the client provided a valid token. 
 - `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
 - `{title:'initialState', payload: { 'roomId': (string), 'configuration': (array), 'results': (array) }}` Sent after the client joins a room.
 
