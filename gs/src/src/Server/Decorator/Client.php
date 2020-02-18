@@ -2,47 +2,46 @@
 
 namespace App\Server\Decorator;
 
+use App\Client\ClientRegistry;
 use App\Server\Connection\WsConnection;
-use App\Server\Session\SessionProvider;
 use Exception;
 
-final class Session extends Decorator
+final class Client extends Decorator
 {
 
-    private SessionProvider $sessions;
+    private ClientRegistry $clientRegistry;
 
     public function __construct(
         Handler $handler,
-        SessionProvider $sessionProvider
+        ClientRegistry $clientRegistry
     ) {
-        $this->sessions = $sessionProvider;
+        $this->clientRegistry = $clientRegistry;
         parent::__construct($handler);
     }
 
     public function onOpen(WsConnection $connection): WsConnection
     {
-        return parent::onOpen($this->attachSession($connection));
+        return parent::onOpen($this->attachClient($connection));
     }
 
     public function onMessage(WsConnection $connection, array $message): WsConnection
     {
-        return parent::onMessage($this->attachSession($connection), $message);
+        return parent::onMessage($this->attachClient($connection), $message);
     }
 
     public function onError(WsConnection $connection, Exception $exception): WsConnection
     {
-        return parent::onError($this->attachSession($connection), $exception);
+        return parent::onError($connection, $exception);
     }
 
     public function onClose(WsConnection $connection): WsConnection
     {
-        $connection = $this->attachSession($connection);
         return parent::onClose($connection);
     }
 
-    private function attachSession(WsConnection $connection): WsConnection
+    private function attachClient(WsConnection $connection): WsConnection
     {
-        $connection->setSessionId($this->sessions->getSessionId($connection));
+        $connection->setClient($this->clientRegistry->getOrCreate($connection));
         return $connection;
     }
 }

@@ -6,6 +6,8 @@ use App\Client\ClientRegistry;
 use App\Room\RoomRegistry;
 use App\Server\Connection\WsConnectionRegistry;
 use App\Server\Decorator\BaseHandler;
+use App\Server\Decorator\Client;
+use App\Server\Decorator\Connection;
 use App\Server\Decorator\Handler;
 use App\Server\Decorator\Log;
 use App\Server\Decorator\Routing;
@@ -31,12 +33,9 @@ class ServerOperationsFactory
     {
         $serverOperations = new BaseHandler();
         $serverOperations = new Routing($serverOperations, $this->routingTable);
-        $serverOperations = new Session(
-            $serverOperations,
-            $this->clientRegistry,
-            SessionProviderFactory::get(),
-            $this->connectionRegistry
-        );
+        $serverOperations = new Client($serverOperations, $this->clientRegistry);
+        $serverOperations = new Connection($serverOperations, $this->connectionRegistry);
+        $serverOperations = new Session($serverOperations, SessionProviderFactory::get());
         $serverOperations = new Log($serverOperations);
         return $serverOperations;
     }
