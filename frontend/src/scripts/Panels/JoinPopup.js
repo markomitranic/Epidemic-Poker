@@ -1,5 +1,5 @@
 "use strict";
-import ErrorMessage from "../ErrorMessage";
+import ErrorMessage from "./ErrorMessage";
 
 class JoinPopup {
 
