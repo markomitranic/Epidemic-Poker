@@ -2,6 +2,7 @@
 
 import Room from "./Room";
 import ConnectionManager from "../ConnectionManager";
+import Message from "../Message";
 
 class RoomManager {
 
@@ -18,8 +19,13 @@ class RoomManager {
         return this.rooms[roomName];
     }
 
-    create(callback) {
-        this.connectionManager.getNewConnection(callback);
+    create(params) {
+        this.connectionManager.getAvailableShard((serverName) => {
+            const connection = this.connectionManager.getConnection(serverName);
+            connection.onOpen(() => {
+                connection.send(new Message('create', {configuration: params}));
+            });
+        });
     }
 
     connectionClose(connection, context) {

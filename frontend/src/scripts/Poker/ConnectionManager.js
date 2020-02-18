@@ -17,12 +17,6 @@ class ConnectionManager {
         return this.connections[serverName];
     }
 
-    getNewConnection(callback) {
-        this.getAvailableShard((serverName) => {
-            callback(this.getConnection(serverName));
-        });
-    }
-
     getAvailableShard(callback) {
         var serverNameRequest = new XMLHttpRequest();
         serverNameRequest.addEventListener("load", function() {
