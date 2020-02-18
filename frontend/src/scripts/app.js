@@ -1,7 +1,7 @@
 "use strict";
 
 import '@fortawesome/fontawesome-free/js/all.js';
-import Join from "./Join";
+import Join from "./Poker/Join";
 import PanelManager from "./Panels/PanelManager";
 import NavigationPanel from "./Panels/NavigationPanel";
 import RoomManager from "./Poker/Room/RoomManager";

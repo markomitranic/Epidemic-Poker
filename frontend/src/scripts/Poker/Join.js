@@ -1,5 +1,5 @@
 "use strict";
-import JoinPopup from "./Panels/JoinPopup";
+import JoinPopup from "../Panels/JoinPopup";
 
 class Join {
 
@@ -9,10 +9,7 @@ class Join {
     }
 
     bootstrapDom() {
-        this.joinButton = document.querySelector('nav ul li.join-button');
-        if (!this.joinButton) {
-            throw "Unable to bootstrap join button.";
-        }
+        this.joinButton = document.querySelector('#navigation-panel ul li.join-button');
         this.joinButton.addEventListener('click', this.onClick);
         this.joinButton.join = this;
     }
