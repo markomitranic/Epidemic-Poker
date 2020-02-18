@@ -10,16 +10,15 @@ class ShardResolver {
     }
 
     resolve(request, response) {
-        response.send({
-            'success': true,
-            'delegatedShard': this.shardsMap[this.nextShard]
-        });
+        const responseShard = this.shardsMap[this.nextShard];
 
         // A simple round robin here.
         this.nextShard++;
         if (this.nextShard >= this.shardsMap.length) {
             this.nextShard = 0;
         }
+
+        return responseShard;
     }
 
 }

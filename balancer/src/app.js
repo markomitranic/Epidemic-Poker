@@ -4,7 +4,13 @@ const app = express();
 const shardResolver = require('./ShardResolver');
 const port = getenv.int('HTTP_PORT');
 
-app.get('/', (req, res) => {
-    shardResolver.resolve(req, res);
+app.get('/', (request, response) => {
+    const shardName = shardResolver.resolve();
+
+    response.setHeader('Content-Type', 'application/json');
+    response.send({
+        'success': true,
+        'delegatedShard': shardName
+    });
 });
 app.listen(port, () => console.log(`Listening on port ${port}!`));
