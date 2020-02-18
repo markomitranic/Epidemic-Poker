@@ -11,13 +11,15 @@ abstract class Error
     public const NOT_FOUND = 1582037581;
     public const PAYLOAD_DESERIALIZE = 1582037320;
     public const NO_ROOM = 1582038750;
+    public const ERROR_CREATING_ROOM = 1582051668;
 
     /** @var int[] */
     private const MESSAGES = [
         self::SERVER_ERROR => 'Unknown error',
         self::NOT_FOUND => 'Resource not found.',
         self::PAYLOAD_DESERIALIZE => 'Unable to deserialize the payload',
-        self::NO_ROOM => 'Room with that name cannot be found.'
+        self::NO_ROOM => 'Room with that name cannot be found.',
+        self::ERROR_CREATING_ROOM => 'An error occured during room creation.'
     ];
 
     public static function message($code): string

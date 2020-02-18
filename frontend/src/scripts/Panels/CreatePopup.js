@@ -33,7 +33,7 @@ class CreatePopup {
         }
 
         this.createPopup.roomManager.create({
-            type: this.selectedType
+            type: this.createPopup.selectedType
         });
         this.createPopup.close();
     }

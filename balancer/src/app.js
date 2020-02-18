@@ -13,4 +13,5 @@ app.get('/', (request, response) => {
         'delegatedShard': shardName
     });
 });
+
 app.listen(port, () => console.log(`Listening on port ${port}!`));

@@ -23,7 +23,7 @@ class RoomManager {
         this.connectionManager.getAvailableShard((serverName) => {
             const connection = this.connectionManager.getConnection(serverName);
             connection.onOpen(() => {
-                connection.send(new Message('create', {configuration: params}));
+                connection.send(new Message('create', params));
             });
         });
     }
