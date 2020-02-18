@@ -31,12 +31,11 @@ final class Session extends Decorator
 
     public function onError(WsConnection $connection, Exception $exception): WsConnection
     {
-        return parent::onError($this->attachSession($connection), $exception);
+        return parent::onError($connection, $exception);
     }
 
     public function onClose(WsConnection $connection): WsConnection
     {
-        $connection = $this->attachSession($connection);
         return parent::onClose($connection);
     }
 
