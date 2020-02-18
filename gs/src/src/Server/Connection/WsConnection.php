@@ -64,15 +64,4 @@ class WsConnection
         return $this;
     }
 
-    public function close(): void
-    {
-        $this->connection->close();
-        $this->connection = null;
-        if (!is_null($this->getClient())) {
-            $this->getClient()->setConnection(null);
-        }
-        $this->client = null;
-        $this->sessionId = null;
-    }
-
 }

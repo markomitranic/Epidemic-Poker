@@ -42,9 +42,8 @@ class WsConnectionRegistry
         if (array_key_exists($connection->getSessionId(), $this->connections)) {
             unset($this->connections[$connection->getSessionId()]);
         }
-        $connection->close();
-
-        // maybe remove from rooms at this point?
+        $connection->getConnection()->close();
+        $connection->setConnection(null);
     }
 
 }
