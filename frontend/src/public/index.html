@@ -12,6 +12,7 @@
 
 <nav id="navigation-panel">
     <ul>
+        <li class="create-button">Create a Room</li>
         <li class="join-button">Join a Room</li>
     </ul>
     <div class="toggle-button"><i class="fas fa-angle-double-down"></i></div>
@@ -29,6 +30,38 @@
     <input type="text" placeholder="/1/abercrombie">
     <p class="error"></p>
     <button>Play!</button>
+</div>
+<div class="fullscreen-popup" id="create-popup">
+    <ul>
+        <li data-type="poker">
+            <p class="title">Planning poker</p>
+            <p>(0, 1/2, 1, 2, 3, 5, 8, 13, 20 ... 100)</p>
+        </li>
+        <li data-type="fibonacci">
+            <p class="title">Fibonacci</p>
+            <p>(0, 1, 2, 3, 5, 8, 13, 21 ... 144)</p>
+        </li>
+        <li data-type="natural">
+            <p class="title">Natural</p>
+            <p>(1, 2, 3, 4, 5, 6 ... 16)</p>
+        </li>
+        <li data-type="tshirt">
+            <p class="title">T-Shirt</p>
+            <p>(Xs, S, M, L, XL)</p>
+        </li>
+        <li data-type="emoji">
+            <p class="title">Smilies</p>
+            <p>(
+                <i class="fas fa-tired"></i>,
+                <i class="fas fa-surprise"></i>,
+                <i class="fas fa-meh-rolling-eyes"></i>,
+                <i class="fas fa-smile"></i>,
+                <i class="fas fa-grin"></i>,
+                <i class="fas fa-smile-wink"></i>
+                )</p>
+        </li>
+    </ul>
+    <button class="create">Create</button>
 </div>
 <div id="curtain"></div>
 

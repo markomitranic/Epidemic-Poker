@@ -1,7 +1,7 @@
 #error-message {
   display: flex;
-  position: absolute;
-  bottom: 0;
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
   background: #af2020;
@@ -10,7 +10,7 @@
   padding: 10px 15px;
   color: white;
   z-index: 15;
-  transform: translateY(100%);
+  transform: translateY(-100%);
   transition: 0.2s transform ease-in-out;
 
   &.visible {

@@ -8,7 +8,7 @@
   right: 0;
   width: 100%;
   max-height: calc(100% - 100px);
-  background: $seaBlue;
+  background: $navigation;
   transform: translateY(-100%);
   transition: 0.2s transform ease-in-out;
 
@@ -32,7 +32,7 @@
     position: absolute;
     bottom: -60px;
     right: -60px;
-    background: $seaBlue;
+    background: $navigation;
     padding: 0;
     border-radius: 50%;
     min-width: 120px;
