@@ -14,6 +14,13 @@ class Handler implements \App\Message\Handler
     /** @var string  */
     public const NAME = 'join';
 
+    private RoomRegistry $rooms;
+
+    public function __construct(RoomRegistry $roomRegistry)
+    {
+        $this->rooms = $roomRegistry;
+    }
+
     public function handle(WsConnection $connection, array $data): void
     {
         try {

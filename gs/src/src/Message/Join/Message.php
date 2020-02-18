@@ -15,4 +15,5 @@ class Message extends BaseMessage
             new Payload($roomId)
         );
     }
+
 }

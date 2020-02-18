@@ -14,7 +14,7 @@ class GSComponent implements MessageComponentInterface {
     private Handler $serverOperations;
 
     public function __construct() {
-        $this->serverOperations = ServerOperationsFactory::getServerOperations();
+        $this->serverOperations = (new ServerOperationsFactory())->getServerOperations();
     }
 
     public function onOpen(ConnectionInterface $connection): void
