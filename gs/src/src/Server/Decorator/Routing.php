@@ -32,7 +32,7 @@ class Routing extends Decorator
         }
 
         $connection->send(new NotFoundMessage($message, ));
-        return $connection;
+        return parent::onMessage($connection, $message);
     }
 
     public function onError(WsConnection $connection, Exception $exception): WsConnection

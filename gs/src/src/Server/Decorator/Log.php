@@ -12,19 +12,19 @@ class Log extends Decorator
     public function onOpen(WsConnection $connection): WsConnection
     {
         \App\Utility\Log::info("New connection!", ['client' => $connection->getRequest()]);
-        return $connection;
+        return parent::onOpen($connection);
     }
 
     public function onMessage(WsConnection $connection, array $message): WsConnection
     {
         \App\Utility\Log::info("Incoming message from client.", ['client' => $connection->getRequest(), 'message' => $message]);
-        return $connection;
+        return parent::onMessage($connection, $message);
     }
 
     public function onClose(WsConnection $connection): WsConnection
     {
         \App\Utility\Log::info("Client left.", ['client' => $connection->getRequest()]);
-        return $connection;
+        return parent::onClose($connection);
     }
 
     public function onError(WsConnection $connection, Exception $exception): WsConnection
@@ -36,7 +36,7 @@ class Log extends Decorator
                 'client' => $connection->getRequest()
             ]
         );
-        return $connection;
+        return parent::onError($connection, $exception);
     }
 
 }
