@@ -2,8 +2,8 @@
 
 class Message {
 
-    constructor(name, payload) {
-        this.name = name;
+    constructor(title, payload) {
+        this.title = title;
         this.payload = payload;
     }
 
