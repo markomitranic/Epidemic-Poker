@@ -33,6 +33,7 @@ Talking protocol is based on tuples with the first member describing the name of
 
 *GS says:*
 - `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured.
+- `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
 
 *Client says:*
 - `{title:'join', payload: { 'roomId': (string) }}` Ask to join a specific room.
