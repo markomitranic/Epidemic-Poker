@@ -23,6 +23,13 @@ services:
     networks:
       - epidemicpoker
 
+  epidemicpoker_balancer:
+    volumes:
+      # Code
+      - ./balancer/src:/app/epidemicpoker:delegated
+      # Ignore Node Modules
+      - epidemicpoker-balancer-node:/app/epidemicpoker/node_modules
+
   epidemicpoker_gs:
     build:
       target: dev
@@ -36,3 +43,4 @@ services:
 volumes:
   epidemicpoker-frontend-build:
   epidemicpoker-frontend-node:
+  epidemicpoker-balancer-node:

@@ -25,6 +25,15 @@ services:
     networks:
       - epidemicpoker
 
+  epidemicpoker_balancer:
+    container_name: epidemicpoker_balancer
+    build:
+      context: ./balancer
+    environment:
+      - HTTP_PORT=8080
+    networks:
+      - epidemicpoker
+
 networks:
   epidemicpoker:
     name: epidemicpoker
