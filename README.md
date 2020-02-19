@@ -37,11 +37,13 @@ Talking protocol is based on tuples with the first member describing the name of
 - `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
 - `{title:'initialState', payload: { 'roomId': (string), 'clientName': (string), 'type': (string), 'currentRound': (int) 'results': (array)[(object[]){name: (string), value: (float)}] }}` Sent after the client joins a room.
 - `{title:'voteChange', payload: { 'roomId': (string), value: (float), name: (string) }}` Someone has voted into this room.
+- `{title:'coffeeBreak', {roomId: (string), clientName: (string)}` A room member has asked everyone to go on a coffee break.
 
 *Client says:*
 - `{title:'create', payload: { 'type': (string) }}` Create a new room.
 - `{title:'join', payload: { 'roomId': (string) }}` Ask to join a specific room.
 - `{title:'vote', {roomId: (string), value: (float)}` Cast a vote to the room.
+- `{title:'coffeeBreak', {roomId: (string), clientName: (string)}` A room member has asked everyone to go on a coffee break.
 
 ### Scaling
 Since docker-compose does not support scaling or autoscaling anymore, the only way to scale the number of GS instances/shards is to duplicate the GS service blocks within the docker-compose configuration.
