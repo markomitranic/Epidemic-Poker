@@ -36,7 +36,7 @@ Talking protocol is based on tuples with the first member describing the name of
 - `{title:'authSuccess', payload: { 'cookieName': (string) }}` An existing session is authentificated. This happens instead of `sessionChange` if the client provided a valid token. 
 - `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
 - `{title:'initialState', payload: { 'roomId': (string), 'clientName': (string), 'type': (string), 'currentRound': (int) 'results': (array)[(object[]){name: (string), value: (float)}] }}` Sent after the client joins a room.
-- `{title:'vote', payload: { 'roomId': (string), value: (float), name: (string) }}` Someone has voted into this room.
+- `{title:'voteChange', payload: { 'roomId': (string), value: (float), name: (string) }}` Someone has voted into this room.
 
 *Client says:*
 - `{title:'create', payload: { 'type': (string) }}` Create a new room.
