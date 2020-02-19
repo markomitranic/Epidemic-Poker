@@ -42,7 +42,7 @@ class Handler implements \App\Message\Handler
                 $room->getName(),
                 $connection->getClient()->getName(),
                 $room->getType(),
-                $room->getCurrentRound(),
+                $room->getCurrentRoundIndex(),
                 $room->getRounds()
             ));
         } catch (\Exception $e) {

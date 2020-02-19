@@ -30,7 +30,7 @@ class Client
         return $this->id;
     }
 
-    public function getConnection(): WsConnection
+    public function getConnection(): ?WsConnection
     {
         return $this->connection;
     }

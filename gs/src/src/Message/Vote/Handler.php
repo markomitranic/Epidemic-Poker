@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Message\Join;
+namespace App\Message\Vote;
 
+use App\Client\Client;
 use App\Message\Error;
 use App\Message\ErrorMessage\Message as NotFoundMessage;
-use App\Message\InitialState\Message as InitialStateMessage;
+use App\Message\VoteChange\Message as VoteChangeMessage;
 use App\Room\RoomRegistry;
+use App\Room\Vote;
 use App\Server\Connection\WsConnection;
 use App\Utility\Log;
 
@@ -13,7 +15,7 @@ class Handler implements \App\Message\Handler
 {
 
     /** @var string  */
-    public const NAME = 'join';
+    public const NAME = 'vote';
 
     private RoomRegistry $rooms;
 
@@ -36,14 +38,15 @@ class Handler implements \App\Message\Handler
 
         try {
             $room = $this->rooms->getByName(strtolower($payload->getRoomId()));
-            $room->join($connection->getClient());
-            $connection->send(new InitialStateMessage(
-                $room->getName(),
-                $connection->getClient()->getName(),
-                $room->getType(),
-                $room->getCurrentRoundIndex(),
-                $room->getRounds()
-            ));
+
+            $vote = new Vote($connection->getClient(), $payload->getValue());
+            $room->getCurrentRound()->addVote($vote);
+
+            foreach ($room->getClients() as $client) {
+                if ($client !== $connection->getClient()) {
+                    $this->sendVoteChangeToClient($client, $room->getName(), $vote);
+                }
+            }
         } catch (\Exception $e) {
             Log::error(Error::message(Error::NO_ROOM), ['originalMessage' => $data, 'exception' => $e]);
             $connection->send(new NotFoundMessage($data, Error::NO_ROOM));
@@ -58,6 +61,19 @@ class Handler implements \App\Message\Handler
             return true;
         }
         return false;
+    }
+
+    private function sendVoteChangeToClient(Client $client, string $roomName, Vote $vote): void
+    {
+        if (is_null($client->getConnection())) {
+            return;
+        }
+
+        $client->getConnection()->send(new VoteChangeMessage(
+            $roomName,
+            $vote->getValue(),
+            $client->getName()
+        ));
     }
 
     /**

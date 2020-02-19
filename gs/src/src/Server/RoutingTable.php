@@ -11,7 +11,8 @@ class RoutingTable
     /** @var string[] */
     public const ROUTES = [
         \App\Message\Join\Handler::class => 'joinHandler',
-        \App\Message\Create\Handler::class => 'createHandler'
+        \App\Message\Create\Handler::class => 'createHandler',
+        \App\Message\Vote\Handler::class => 'voteHandler'
     ];
 
     private RoomRegistry $roomRegistry;
@@ -35,6 +36,11 @@ class RoutingTable
     private function createHandler(): Handler
     {
         return new \App\Message\Create\Handler($this->roomRegistry);
+    }
+
+    private function voteHandler(): Handler
+    {
+        return new \App\Message\Vote\Handler($this->roomRegistry);
     }
 
 }

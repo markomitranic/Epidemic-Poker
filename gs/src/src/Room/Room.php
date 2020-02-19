@@ -45,9 +45,22 @@ class Room
         $this->clients[$client->getId()] = $client;
     }
 
-    public function getCurrentRound(): int
+    /**
+     * @return Client[]
+     */
+    public function getClients(): array
+    {
+        return $this->clients;
+    }
+
+    public function getCurrentRoundIndex(): int
     {
         return $this->currentRound;
+    }
+
+    public function getCurrentRound(): Round
+    {
+        return $this->getRounds()[$this->getCurrentRoundIndex()];
     }
 
     /**
