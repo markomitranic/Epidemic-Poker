@@ -6,9 +6,10 @@ import Message from "../Message";
 
 class RoomManager {
 
-    constructor(navigationPanel) {
+    constructor(navigationPanel, roomWindow) {
         this.rooms = {};
         this.navigationPanel = navigationPanel;
+        this.roomWindow = roomWindow;
         this.connectionManager = new ConnectionManager();
     }
 
@@ -67,6 +68,7 @@ class RoomManager {
                 }
                 room.initialState(data.payload);
                 this.navigationPanel.addRoom(room);
+                this.roomWindow.show(room);
             },
             this
         );

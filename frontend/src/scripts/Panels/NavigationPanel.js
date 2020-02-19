@@ -1,8 +1,9 @@
 "use strict";
 class NavigationPanel {
 
-    constructor(panelManager) {
+    constructor(panelManager, roomWindow) {
         this.panelManager = panelManager;
+        this.roomWindow = roomWindow;
         this.roomList = [];
         this.bootstrapDom();
     }
@@ -19,24 +20,38 @@ class NavigationPanel {
     }
 
     addRoom(room) {
-        if (this.roomList) {
-            for(let i=0; i < this.roomList.length; i++) {
+        if (this.roomList.length) {
+            for (let i = 0; i < this.roomList.length; i++) {
                 if (this.roomList[i].roomObject === room) {
                     return;
                 }
             }
         }
 
+        this.createNewRoomElement(room);
+    }
+
+    createNewRoomElement(room) {
         const newItem = document.createElement('li');
         newItem.innerText = room.name.charAt(0).toUpperCase() + room.name.slice(1);
         newItem.roomObject = room;
+        newItem.addEventListener('click', () => {
+            this.roomWindow.show(room);
+        });
         this.roomList.push(newItem);
         //listener
         this.roomListContainer.appendChild(newItem);
     }
 
     removeRoom(room) {
-
+        const roomListItems = this.roomListContainer.querySelectorAll('li');
+        if (roomListItems.length) {
+            for(let i=0; i < roomListItems.length; i++) {
+                if (roomListItems[i].roomObject === room) {
+                    this.roomListContainer.removeChild(roomListItems[i]);
+                }
+            }
+        }
     }
 
     togglePanel() {
