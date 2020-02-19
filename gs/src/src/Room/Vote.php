@@ -7,20 +7,20 @@ use App\Client\Client;
 class Vote
 {
 
-    private Client $client;
+    private RoomClient $client;
 
     private float $value;
 
-    public function __construct(Client $client, float $value)
+    public function __construct(RoomClient $client, float $value)
     {
         $this->client = $client;
         $this->value = $value;
     }
 
     /**
-     * @return Client
+     * @return RoomClient
      */
-    public function getClient(): Client
+    public function getClient(): RoomClient
     {
         return $this->client;
     }

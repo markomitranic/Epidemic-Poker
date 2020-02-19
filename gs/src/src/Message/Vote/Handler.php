@@ -6,6 +6,7 @@ use App\Client\Client;
 use App\Message\Error;
 use App\Message\ErrorMessage\Message as NotFoundMessage;
 use App\Message\VoteChange\Message as VoteChangeMessage;
+use App\Room\RoomClient;
 use App\Room\RoomRegistry;
 use App\Room\Vote;
 use App\Server\Connection\WsConnection;
@@ -38,12 +39,13 @@ class Handler implements \App\Message\Handler
 
         try {
             $room = $this->rooms->getByName(strtolower($payload->getRoomId()));
+            $roomClient = $room->findClient($connection->getClient());
 
-            $vote = new Vote($connection->getClient(), $payload->getValue());
+            $vote = new Vote($roomClient, $payload->getValue());
             $room->getCurrentRound()->addVote($vote);
 
             foreach ($room->getClients() as $client) {
-                if ($client !== $connection->getClient()) {
+                if ($client->getClient() !== $connection->getClient()) {
                     $this->sendVoteChangeToClient($client, $room->getName(), $vote);
                 }
             }
@@ -63,13 +65,13 @@ class Handler implements \App\Message\Handler
         return false;
     }
 
-    private function sendVoteChangeToClient(Client $client, string $roomName, Vote $vote): void
+    private function sendVoteChangeToClient(RoomClient $client, string $roomName, Vote $vote): void
     {
-        if (is_null($client->getConnection())) {
+        if (is_null($client->getClient()->getConnection())) {
             return;
         }
 
-        $client->getConnection()->send(new VoteChangeMessage(
+        $client->getClient()->getConnection()->send(new VoteChangeMessage(
             $roomName,
             $vote->getValue(),
             $client->getName()

@@ -11,15 +11,9 @@ class Client
 
     private ?WsConnection $connection;
 
-    private string $name;
-
-    public function __construct(
-        WsConnection $connection,
-        string $name
-    ) {
+    public function __construct(WsConnection $connection) {
         $this->id = $connection->getSessionId();
         $this->connection = $connection;
-        $this->name = $name;
     }
 
     /**
@@ -39,11 +33,6 @@ class Client
     {
         $this->connection = $connection;
         return $this;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 
 }

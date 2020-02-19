@@ -3,18 +3,21 @@
 namespace App\Room;
 
 use App\Client\Client;
+use App\Client\NameGenerator;
 
 class Room
 {
+
+    const CLIENTS_LIMIT = 10;
 
     private string $name;
 
     private string $type = 'float';
 
     /**
-     * @var Client[]
+     * @var RoomClient[]
      */
-    private array $clients;
+    private array $clients = [];
 
     private int $currentRound = 0;
 
@@ -40,18 +43,40 @@ class Room
         return $this->type;
     }
 
-    public function join(Client $client): void
+    /**
+     * @param Client $client
+     * @return RoomClient
+     * @throws \Exception
+     */
+    public function join(Client $client): RoomClient
     {
-        $this->clients[$client->getId()] = $client;
+        $roomClient = new RoomClient($client, $this->getUniqueClientName());
+        $this->clients[$client->getId()] = $roomClient;
+        return $roomClient;
     }
 
-    public function leave(Client $client): void
+    public function leave(RoomClient $client): void
     {
-        unset($this->clients[$client->getId()]);
+        unset($this->clients[$client->getClient()->getId()]);
     }
 
     /**
-     * @return Client[]
+     * @param Client $client
+     * @return RoomClient
+     * @throws \Exception
+     */
+    public function findClient(Client $client): RoomClient
+    {
+        foreach ($this->clients as $roomClient) {
+            if ($roomClient->getClient() === $client) {
+                return $roomClient;
+            }
+        }
+        throw new \Exception('The client cannot be found');
+    }
+
+    /**
+     * @return RoomClient[]
      */
     public function getClients(): array
     {
@@ -76,5 +101,32 @@ class Room
         return $this->rounds;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private function getUniqueClientName(): string
+    {
+        $retries = self::CLIENTS_LIMIT;
+        do {
+            $name = NameGenerator::getRandom();
+            $retries--;
+            if ($retries <= 0) {
+                throw new \Exception('Room is currently full.');
+            }
+        } while ($this->nameInUse($name));
+
+        return $name;
+    }
+
+    private function nameInUse(string $name): bool
+    {
+        foreach ($this->clients as $client) {
+            if ($client->getName() === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

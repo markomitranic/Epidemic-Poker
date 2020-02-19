@@ -2,6 +2,7 @@
 
 namespace App\Room;
 
+use App\Client\NameGenerator;
 use Faker\Factory;
 
 final class RoomRegistry
@@ -42,6 +43,5 @@ final class RoomRegistry
         }
         return false;
     }
-
 
 }

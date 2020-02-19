@@ -5,6 +5,7 @@ namespace App\Message\Create;
 use App\Message\Error;
 use App\Message\ErrorMessage\Message as ErrorMessage;
 use App\Message\InitialState\Message as InitialStateMessage;
+use App\Room\RoomClient;
 use App\Room\RoomRegistry;
 use App\Server\Connection\WsConnection;
 use App\Utility\Log;
@@ -36,11 +37,11 @@ class Handler implements \App\Message\Handler
 
         try {
             $room = $this->rooms->create($payload->getType());
-            $room->join($connection->getClient());
+            $roomClient = $room->join($connection->getClient());
 
             $connection->send(new InitialStateMessage(
                 $room->getName(),
-                $connection->getClient()->getName(),
+                $roomClient->getName(),
                 $room->getType(),
                 $room->getCurrentRoundIndex(),
                 $room->getRounds()

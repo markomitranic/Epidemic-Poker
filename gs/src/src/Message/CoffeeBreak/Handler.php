@@ -6,6 +6,7 @@ use App\Client\Client;
 use App\Message\CoffeeBreak\Message as CoffeeBreakMessage;
 use App\Message\Error;
 use App\Message\ErrorMessage\Message as NotFoundMessage;
+use App\Room\RoomClient;
 use App\Room\RoomRegistry;
 use App\Server\Connection\WsConnection;
 use App\Utility\Log;
@@ -38,7 +39,7 @@ class Handler implements \App\Message\Handler
         try {
             $room = $this->rooms->getByName(strtolower($payload->getRoomId()));
             foreach ($room->getClients() as $client) {
-                if ($client !== $connection->getClient()) {
+                if ($client->getClient() !== $connection->getClient()) {
                     $this->sendCoffeeBreakToClient($client, $room->getName());
                 }
             }
@@ -58,13 +59,13 @@ class Handler implements \App\Message\Handler
         return false;
     }
 
-    private function sendCoffeeBreakToClient(Client $client, string $roomName): void
+    private function sendCoffeeBreakToClient(RoomClient $client, string $roomName): void
     {
-        if (is_null($client->getConnection())) {
+        if (is_null($client->getClient()->getConnection())) {
             return;
         }
 
-        $client->getConnection()->send(new CoffeeBreakMessage(
+        $client->getClient()->getConnection()->send(new CoffeeBreakMessage(
             $roomName,
             $client->getName()
         ));
