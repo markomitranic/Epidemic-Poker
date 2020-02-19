@@ -20,7 +20,13 @@ final class NameGenerator
         '🐻',
         '🐭',
         '🦊',
-        '🐦'
+        '🐦',
+        '🐶',
+        '🐼',
+        '🐯',
+        '🦁',
+        '🐥',
+        '🦄'
     ];
 
     private int $nextIndex  = 0;
