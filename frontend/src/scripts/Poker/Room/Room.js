@@ -8,6 +8,7 @@ class Room {
 
     constructor(name, connection) {
         this.name = name;
+        this.clientName = '👎';
         this.connection = connection;
         this.type = 'default';
         this.results = [];
@@ -22,7 +23,6 @@ class Room {
 
     messageListener(message) {
         if (message.title === 'voteChange' && message.payload.roomId === this.name) {
-            console.log("STIGAO NOVI VOTE SPOLJA!!!", message);
             this.addVote(new Vote(data.payload.name, data.payload.value));
         }
     }
@@ -36,9 +36,18 @@ class Room {
         this.connection.send(new Message('vote', {roomId: this.name, value: vote.value}));
     }
 
+    coffeeBreak() {
+        this.connection.send(new Message('coffeeBreak', {roomId: this.name, clientName: this.clientName}));
+    }
+
+    leave() {
+
+    }
+
     initialState(state) {
         this.currentRound = parseInt(state.currentRound);
         this.type = state.type;
+        this.clientName = state.clientName;
 
         state.results.forEach((round) => {
             this.results.push(this.parseRoundInput(round));

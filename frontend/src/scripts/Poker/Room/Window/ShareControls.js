@@ -8,7 +8,7 @@ class ShareControls {
     }
 
     populate(room) {
-        this.shareableLink.innerText = `http://${location.host}/${room.connection.serverName}/${room.name}`;
+        this.shareableLink.innerText = `http://${location.host}/join/${room.connection.serverName}/${room.name}`;
         this.shareableCodeBlocks[0].innerText = room.connection.serverName;
         this.shareableCodeBlocks[1].innerText = room.name;
     }

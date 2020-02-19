@@ -2,6 +2,7 @@
 
 import Cookie from "../Cookie";
 import ErrorMessage from "../Panels/ErrorMessage";
+import SuccessMessage from "../Panels/SuccessMessage";
 
 class Connection {
 
@@ -44,6 +45,14 @@ class Connection {
     }
 
     send(message) {
+        if (this.openEvent === null || !this.authorized) {
+            this.onOpen(() => {
+                console.debug('Sending message', message);
+                this.socket.send(JSON.stringify(message));
+            });
+            return;
+        }
+
         console.debug('Sending message', message);
         this.socket.send(JSON.stringify(message));
     }
@@ -144,6 +153,11 @@ class Connection {
             if (data.title === 'authSuccess') {
                 this.authorized = true;
                 this.triggerObservers('open', this.openEvent);
+            }
+        });
+        this.onMessage((data) => {
+            if (data.title === 'coffeeBreak') {
+                new SuccessMessage(`${data.clientName} asked everyone for a ☕️ break.`);
             }
         });
         this.onMessage((data) => {

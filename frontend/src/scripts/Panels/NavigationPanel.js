@@ -37,6 +37,7 @@ class NavigationPanel {
         newItem.roomObject = room;
         newItem.addEventListener('click', () => {
             this.roomWindow.show(room);
+            this.panelManager.closeAll();
         });
         this.roomList.push(newItem);
         //listener
