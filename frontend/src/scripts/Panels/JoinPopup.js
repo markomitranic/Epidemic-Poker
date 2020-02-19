@@ -12,7 +12,8 @@ class JoinPopup {
     bootstrapDom() {
         this.element = document.querySelector('#join-popup');
         this.button = this.element.querySelector('button');
-        this.roomAddressInput = this.element.querySelector('input');
+        this.gsInput = this.element.querySelector('#join-gs-name');
+        this.roomInput = this.element.querySelector('#join-room-name');
 
         this.element.joinPopup = this;
         this.button.joinPopup = this;
@@ -21,9 +22,9 @@ class JoinPopup {
     }
 
     submitJoinRequest() {
-        const values = this.joinPopup.roomAddressInput.value.split('_');
-        if (values.length !== 2) {
-            new ErrorMessage('The room address should be separated by an underscore (_)');
+        const values = [this.joinPopup.gsInput.value, this.joinPopup.roomInput.value];
+        if (values.length !== 2 || !values[0].length || !values[1].length) {
+            new ErrorMessage('Both fields must be filled if you want us to find the room.');
             return;
         }
         this.joinPopup.roomManager.join(values[0], values[1]);
