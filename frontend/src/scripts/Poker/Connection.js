@@ -24,7 +24,9 @@ class Connection {
             console.info('Connection to server open, waiting for auth.');
         };
         this.socket.onmessage = function (event) {
-            this.connection.triggerObservers('open', JSON.parse(event.data));
+            if (this.connection.observers.open.length) {
+                this.connection.triggerObservers('open', JSON.parse(event.data));
+            }
             this.connection.triggerObservers('message', JSON.parse(event.data));
         };
         this.socket.onclose = function (event) {
@@ -48,24 +50,24 @@ class Connection {
         this.socket.close(code, message);
     }
 
-    onMessage(observer, context, idempotent = true) {
-        this.addObserver('message', observer, context, idempotent);
+    onMessage(observer, context) {
+        this.addObserver('message', observer, context);
     }
-    onOpen(observer, context, idempotent = true) {
+    onOpen(observer, context) {
         if (this.openEvent === null || !this.authorized) {
-            this.addObserver('open', observer, context, idempotent);
+            this.addObserver('open', observer, context);
             return;
         }
         observer(this.openEvent, context);
     }
-    onClose(observer, context, idempotent = true) {
-        this.addObserver('close', observer, context, idempotent);
+    onClose(observer, context) {
+        this.addObserver('close', observer, context);
     }
-    onError(observer, context, idempotent = true) {
-        this.addObserver('error', observer, context, idempotent);
+    onError(observer, context) {
+        this.addObserver('error', observer, context);
     }
 
-    addObserver(collectionName, observer, context, idempotent = true) {
+    addObserver(collectionName, observer, context) {
         this.observers[collectionName].forEach(function (existingObserver) {
             if (existingObserver.observer === observer) {
                 return existingObserver;
@@ -74,8 +76,7 @@ class Connection {
 
         return this.observers[collectionName].push({
             context: context,
-            observer: observer,
-            idempotent: idempotent
+            observer: observer
         });
     }
 
@@ -87,14 +88,21 @@ class Connection {
         });
     }
 
+    findExistingObserver(collectionName, callback) {
+
+        const collection = this.observers[collectionName];
+
+        for (let i = 0; i < this.observers[collectionName].length; i++) {
+            if (Object.is(this.observers[collectionName][i].observer, callback)) {
+                return this.observers[collectionName][i];
+            }
+        }
+    }
+
     triggerObservers(collectionName, event) {
         console.debug(collectionName, event);
         this.observers[collectionName].forEach((observer) => {
             observer.observer(event, observer.context);
-
-            if (!observer.idempotent) {
-                this.removeObserver(collectionName, observer);
-            }
         });
 
         if (collectionName === 'open') {
