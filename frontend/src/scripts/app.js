@@ -15,3 +15,4 @@ const roomManager = new RoomManager(navigationPanel, roomWindow);
 const join = new Join(panelManager, roomManager);
 const create = new Create(panelManager, roomManager);
 
+// roomManager.create({type: 'emoji'});

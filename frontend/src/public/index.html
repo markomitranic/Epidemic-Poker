@@ -23,18 +23,32 @@
 <main>
 
     <div id="no-rooms">
-        Uh oh there is no rooms.
+        <img src="/assets/no-rooms.png" alt="">
+        <div>
+            <h1>Join a room</h1>
+            <p>You are not in any room. Click the arrow and join a session.</p>
+        </div>
     </div>
 
     <div id="room-window">
-        <h1></h1>
+        <p class="user-name">🦊</p>
+
+        <h1>Room: <span></span></h1>
+        <p class="round">Round <span>1</span></p>
+
         <p class="result"></p>
         <ul class="voting-buttons"></ul>
 
         <div class="user-actions">
-            <label for="shareable-link">Shareable Link: <input id="shareable-link" name="shareable-link" type="text" value="" disabled></label>
-            <p class="coffee-break">Coffee Break!</p>
-            <p class="leave-room">Leave</p>
+            <div class="share">
+                <h2>Share this room:</h2>
+                <p class="shareable-link">Via Link: <span></span></p>
+                <p class="shareable-code">Or Code: <span></span> <span></span></p>
+            </div>
+            <div class="pause">
+                <p class="coffee-break">Coffee break!<span>☕️</span></p>
+                <p class="leave-room">Leave room<span>🚪</span></p>
+            </div>
         </div>
 
         <div id="visual">
@@ -45,7 +59,6 @@
 </main>
 
 <aside>
-    // charts and stuff
 </aside>
 
 <div class="fullscreen-popup" id="join-popup">

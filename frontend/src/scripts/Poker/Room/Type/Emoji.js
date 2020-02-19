@@ -20,12 +20,12 @@ class Emoji extends BaseType {
 
     calculateValues() {
         return [
-            new Type('fa-tired', 0),
-            new Type('fa-surprise', 0.2),
-            new Type('fa-meh-rolling-eyes', (0.2 * 2).toFixed(2)),
-            new Type('fa-smile', (0.2 * 3).toFixed(2)),
-            new Type('fa-grin', (0.2 * 4).toFixed(2)),
-            new Type('fa-smile-wink', 1),
+            new Type('🤗', 0),
+            new Type('😃', 0.2),
+            new Type('🙂', (0.2 * 2).toFixed(2)),
+            new Type('😕', (0.2 * 3).toFixed(2)),
+            new Type('😞', (0.2 * 4).toFixed(2)),
+            new Type('😩', 1),
         ];
     }
 

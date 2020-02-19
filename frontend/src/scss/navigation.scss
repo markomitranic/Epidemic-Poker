@@ -11,6 +11,8 @@
   background: $navigation;
   transform: translateY(-100%);
   transition: 0.2s transform ease-in-out;
+  padding: 20px 10px;
+  box-sizing: border-box;
 
   &.visible {
     transform: translateY(0);
@@ -23,9 +25,21 @@
   }
 
   ul {
-    list-style-type: none;
-    li {
+    padding: 0;
+    margin: 0;
+    //list-style-type: none;
+    display: block;
 
+    &.rooms-list {
+      margin-bottom: 40px;
+    }
+
+    li {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 26px;
+      margin: 20px 5px;
     }
   }
   .toggle-button {
