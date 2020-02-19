@@ -6,10 +6,10 @@ import Message from "../Message";
 
 class RoomManager {
 
-    constructor() {
+    constructor(navigationPanel) {
         this.rooms = {};
+        this.navigationPanel = navigationPanel;
         this.connectionManager = new ConnectionManager();
-        this.joinListener = null;
     }
 
     join(serverName, roomName) {
@@ -22,7 +22,7 @@ class RoomManager {
         }
 
         room.join();
-        this.expectJoinInitialState(connection, room);
+        this.expectInitialState(connection, room);
         return room;
     }
 
@@ -31,7 +31,7 @@ class RoomManager {
             const connection = this.connectionManager.getConnection(serverName);
             connection.onOpen(() => {
                 connection.send(new Message('create', params));
-                this.expectCreateInitialState(connection);
+                this.expectInitialState(connection);
             });
         });
     }
@@ -55,36 +55,23 @@ class RoomManager {
         });
     }
 
-    expectJoinInitialState(connection, room) {
-        this.removeJoinListener(connection);
-        this.joinListener = (data) => {
-            if (data.title === 'initialState') {
-                this.removeJoinListener(connection);
+    expectInitialState(connection, room) {
+        connection.addObserver(
+            'initialState',
+            (data) => {
+                if (!room) {
+                    room = this.findRoomObjectByName(data.payload.roomId);
+                    if (!room) {
+                        room = this.createRoomObject(data.payload.roomId, connection);
+                    }
+                }
                 room.initialState(data.payload);
-                console.log('stigla join soba', data);
-            }
-        };
-        connection.addObserver('message', this.joinListener);
+                this.navigationPanel.addRoom(room);
+            },
+            this
+        );
     }
 
-    expectCreateInitialState(connection) {
-        this.removeJoinListener(connection);
-        this.joinListener = function(data, context) {
-            context.removeJoinListener(connection);
-            if (data.title === 'initialState') {
-                const room = context.createRoomObject(data.payload.roomId, connection);
-                room.initialState(data.payload);
-            }
-        };
-        connection.addObserver('message', this.joinListener, this);
-    }
-
-    removeJoinListener(connection) {
-        const oldObserver = connection.findExistingObserver('message', this.joinListener);
-        if (oldObserver) {
-            connection.removeObserver('message', oldObserver);
-        }
-    }
 }
 
 export default RoomManager;

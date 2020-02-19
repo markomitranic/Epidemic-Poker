@@ -13,7 +13,8 @@ class Connection {
             open: [],
             message: [],
             close: [],
-            error: []
+            error: [],
+            initialState: null
         };
 
         this.socket = new WebSocket(`ws://${location.host}/poker-entrypoint/${serverName}`);
@@ -68,6 +69,11 @@ class Connection {
     }
 
     addObserver(collectionName, observer, context) {
+        if (collectionName === 'initialState') {
+            this.addInitialStateObserver(collectionName, observer, context);
+            return;
+        }
+
         this.observers[collectionName].forEach(function (existingObserver) {
             if (existingObserver.observer === observer) {
                 return existingObserver;
@@ -80,6 +86,13 @@ class Connection {
         });
     }
 
+    addInitialStateObserver(collectionName, observer, context) {
+        return this.observers.initialState = {
+            context: context,
+            observer: observer
+        };
+    }
+
     removeObserver(collectionName, observer) {
         this.observers[collectionName].forEach((existingObserver, key) => {
             if (Object.is(existingObserver, observer)) {
@@ -89,9 +102,6 @@ class Connection {
     }
 
     findExistingObserver(collectionName, callback) {
-
-        const collection = this.observers[collectionName];
-
         for (let i = 0; i < this.observers[collectionName].length; i++) {
             if (Object.is(this.observers[collectionName][i].observer, callback)) {
                 return this.observers[collectionName][i];
@@ -128,6 +138,14 @@ class Connection {
             if (data.title === 'authSuccess') {
                 this.authorized = true;
                 this.triggerObservers('open', this.openEvent);
+            }
+        });
+        this.onMessage((data) => {
+            if (data.title === 'initialState') {
+                if (this.observers.initialState) {
+                    this.observers.initialState.observer(data, this.observers.initialState.context);
+                    this.observers.initialState = null;
+                }
             }
         });
     }

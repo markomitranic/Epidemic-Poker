@@ -10,6 +10,6 @@ import Create from "./Poker/Create";
 const panelManager = new PanelManager();
 
 const navigationPanel = new NavigationPanel(panelManager);
-const roomManager = new RoomManager();
+const roomManager = new RoomManager(navigationPanel);
 const join = new Join(panelManager, roomManager);
 const create = new Create(panelManager, roomManager);
