@@ -8,6 +8,7 @@ class Connection {
     constructor(serverName) {
         this.serverName = serverName;
         this.openEvent = null;
+        this.authorized = false;
         this.observers = {
             open: [],
             message: [],
@@ -33,16 +34,10 @@ class Connection {
             this.connection.triggerObservers('close', this.connection);
         };
         this.socket.onerror = function (event) {
-            console.error('eror');
             this.connection.triggerObservers('error', event);
         };
 
-        this.onMessage((data) => {
-            this.sessionChange(data, this);
-        });
-        this.onError(function(e) {
-           new ErrorMessage('Unable to connect to server.');
-        });
+        this.bootstrapObservers();
     }
 
     send(message) {
@@ -53,24 +48,24 @@ class Connection {
         this.socket.close(code, message);
     }
 
-    onMessage(observer, context) {
-        this.addObserver('message', observer, context);
+    onMessage(observer, context, idempotent = true) {
+        this.addObserver('message', observer, context, idempotent);
     }
-    onOpen(observer, context) {
-        if (this.openEvent === null) {
-            this.addObserver('open', observer, context);
+    onOpen(observer, context, idempotent = true) {
+        if (this.openEvent === null || !this.authorized) {
+            this.addObserver('open', observer, context, idempotent);
             return;
         }
         observer(this.openEvent, context);
     }
-    onClose(observer, context) {
-        this.addObserver('close', observer, context);
+    onClose(observer, context, idempotent = true) {
+        this.addObserver('close', observer, context, idempotent);
     }
-    onError(observer, context) {
-        this.addObserver('error', observer, context);
+    onError(observer, context, idempotent = true) {
+        this.addObserver('error', observer, context, idempotent);
     }
 
-    addObserver(collectionName, observer, context) {
+    addObserver(collectionName, observer, context, idempotent = true) {
         this.observers[collectionName].forEach(function (existingObserver) {
             if (existingObserver.observer === observer) {
                 return existingObserver;
@@ -79,7 +74,8 @@ class Connection {
 
         return this.observers[collectionName].push({
             context: context,
-            observer: observer
+            observer: observer,
+            idempotent: idempotent
         });
     }
 
@@ -95,22 +91,37 @@ class Connection {
         console.debug(collectionName, event);
         this.observers[collectionName].forEach((observer) => {
             observer.observer(event, observer.context);
+
+            if (!observer.idempotent) {
+                this.removeObserver(collectionName, observer);
+            }
         });
 
         if (collectionName === 'open') {
-            // Open should always be emptied after use, because it is used as a queue.
+            // Open should always be emptied after use, because it is used as a fifo queue.
             this.observers.open = [];
         }
     }
 
-    sessionChange(data) {
-        if (data.title === 'sessionChange') {
-            Cookie.create(data.payload.cookieName, data.payload.token, 1);
-            console.debug('Received a session change request.', data.payload);
-            this.triggerObservers('open', this.openEvent);
-        } else if (data.title === 'authSuccess') {
-            this.triggerObservers('open', this.openEvent);
-        }
+    bootstrapObservers() {
+        this.onError(function(e) {
+            console.error('Unable to connect to server.', e);
+            new ErrorMessage('Unable to connect to server.');
+        });
+        this.onMessage((data) => {
+            if (data.title === 'sessionChange') {
+                this.authorized = true;
+                Cookie.create(data.payload.cookieName, data.payload.token, 1);
+                console.debug('Received a session change request.', data.payload);
+                this.triggerObservers('open', this.openEvent);
+            }
+        });
+        this.onMessage((data) => {
+            if (data.title === 'authSuccess') {
+                this.authorized = true;
+                this.triggerObservers('open', this.openEvent);
+            }
+        });
     }
 
 }
