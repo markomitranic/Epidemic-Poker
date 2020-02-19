@@ -38,7 +38,13 @@ class Handler implements \App\Message\Handler
             $room = $this->rooms->create($payload->getType());
             $room->join($connection->getClient());
 
-            $connection->send(new InitialStateMessage($room->getName()));
+            $connection->send(new InitialStateMessage(
+                $room->getName(),
+                $connection->getClient()->getName(),
+                $room->getType(),
+                $room->getCurrentRound(),
+                $room->getRounds()
+            ));
         } catch (\Exception $e) {
             Log::error(Error::message(Error::ERROR_CREATING_ROOM), ['originalMessage' => $data, 'exception' => $e]);
             $connection->send(new ErrorMessage($data, Error::ERROR_CREATING_ROOM));

@@ -37,7 +37,13 @@ class Handler implements \App\Message\Handler
         try {
             $room = $this->rooms->getByName(strtolower($payload->getRoomId()));
             $room->join($connection->getClient());
-            $connection->send(new InitialStateMessage($room->getName()));
+            $connection->send(new InitialStateMessage(
+                $room->getName(),
+                $connection->getClient()->getName(),
+                $room->getType(),
+                $room->getCurrentRound(),
+                $room->getRounds()
+            ));
         } catch (\Exception $e) {
             Log::error(Error::message(Error::NO_ROOM), ['originalMessage' => $data, 'exception' => $e]);
             $connection->send(new NotFoundMessage($data, Error::NO_ROOM));

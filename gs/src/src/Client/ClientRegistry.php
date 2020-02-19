@@ -14,6 +14,13 @@ class ClientRegistry
      */
     private array $clients = [];
 
+    private NameGenerator $nameGenerator;
+
+    public function __construct()
+    {
+        $this->nameGenerator = new NameGenerator();
+    }
+
     public function getOrCreate(WsConnection $connection): Client
     {
         if (array_key_exists($connection->getSessionId(), $this->clients)) {
@@ -21,8 +28,26 @@ class ClientRegistry
         }
 
         Log::info(Error::message(Error::NO_CLIENTS_FOUND_FOR_ID), ['sessionId' => $connection->getSessionId()]);
-        $this->clients[$connection->getSessionId()] = new Client($connection);
+        $this->clients[$connection->getSessionId()] = new Client($connection, $this->getClientName());
         return $this->clients[$connection->getSessionId()];
     }
 
+    private function getClientName(): string
+    {
+        do {
+            $name = $this->nameGenerator->getRandom();
+        } while ($this->nameInUse($name));
+
+        return $name;
+    }
+
+    private function nameInUse(string $name): bool
+    {
+        foreach ($this->clients as $client) {
+            if ($client->getName() === $name) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

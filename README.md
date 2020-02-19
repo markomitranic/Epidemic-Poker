@@ -35,11 +35,13 @@ Talking protocol is based on tuples with the first member describing the name of
 - `{title:'sessionChange', payload: { 'cookieName': (string), 'token': (string) }}` A session token change has occured. This happens only once per connection and server the purpose to prevent auth race conditions.
 - `{title:'authSuccess', payload: { 'cookieName': (string) }}` An existing session is authentificated. This happens instead of `sessionChange` if the client provided a valid token. 
 - `{title:'error', payload: { 'originalMessage': (array), 'errorMessage': (string), 'errorCode': (int) }}` An error occured.
-- `{title:'initialState', payload: { 'roomId': (string), 'configuration': (array), 'results': (array) }}` Sent after the client joins a room.
+- `{title:'initialState', payload: { 'roomId': (string), 'clientName': (string), 'type': (string), 'currentRound': (int) 'results': (array)[(object[]){name: (string), value: (float)}] }}` Sent after the client joins a room.
+- `{title:'vote', payload: { 'roomId': (string), value: (float), name: (string) }}` Someone has voted into this room.
 
 *Client says:*
 - `{title:'create', payload: { 'type': (string) }}` Create a new room.
 - `{title:'join', payload: { 'roomId': (string) }}` Ask to join a specific room.
+- `{title:'vote', {roomId: (string), value: (float)}` Cast a vote to the room.
 
 ### Scaling
 Since docker-compose does not support scaling or autoscaling anymore, the only way to scale the number of GS instances/shards is to duplicate the GS service blocks within the docker-compose configuration.

@@ -31,7 +31,7 @@ final class RoomRegistry
             $name = strtolower($faker->firstName());
         } while ($this->nameInUse($name));
 
-        $this->rooms[$name] = new Room($name);
+        $this->rooms[$name] = new Room($name, $type);
         return $this->rooms[$name];
     }
 
