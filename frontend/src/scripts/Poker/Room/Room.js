@@ -1,31 +1,55 @@
 "use strict";
 
 import Message from "../Message";
+import Round from "./Round";
+import Vote from "./Vote";
 
 class Room {
 
     constructor(name, connection) {
         this.name = name;
         this.connection = connection;
+        this.type = 'default';
+        this.results = [];
+        this.currentRound = 0;
 
-        this.connection.onMessage((message) => {
-            if (message.title === 'vote' && message.payload.roomId === this.name) {
-                this.messageListener(message.payload);
-            }
-        });
+        this.connection.onMessage((message) => {this.messageListener(data);});
+    }
+
+    getCurrentRound() {
+        return this.results[this.currentRound];
     }
 
     messageListener(data) {
-        console.log('got message into room', this.name, data);
+        if (message.title === 'vote' && message.payload.roomId === this.name) {
+            this.addVote(new Vote(data.payload.name, data.payload.value));
+        }
     }
 
     join() {
         this.connection.send(new Message('join', {roomId: this.name}));
     }
 
+    addVote(vote) {
+        this.getCurrentRound().addVote(vote);
+        this.connection.send(new Message('vote', {roomId: this.name, value: vote.value}));
+    }
+
     initialState(state) {
-        /// ovo zapravo ne radi nista. treba da dodam listener za kreaciju sledece
-        console.log('stigo state u ovu sobu', state);
+        this.currentRound = parseInt(state.currentRound);
+        this.type = state.type;
+
+        state.results.forEach((round) => {
+            this.results.push(this.parseRoundInput(round));
+        });
+    }
+
+    parseRoundInput(roundData) {
+        const round = new Round();
+        for (let i = 0; i < roundData.length; i++) {
+            round.addVote(new Vote(roundData[i].name, roundData[i].value));
+        }
+        return round;
     }
 
 
