@@ -35,7 +35,7 @@ class Handler implements \App\Message\Handler
         }
 
         try {
-            $room = $this->rooms->getByName($payload->getRoomId());
+            $room = $this->rooms->getByName(strtolower($payload->getRoomId()));
             $room->join($connection->getClient());
             $connection->send(new InitialStateMessage($room->getName()));
         } catch (\Exception $e) {
