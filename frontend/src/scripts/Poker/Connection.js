@@ -128,8 +128,8 @@ class Connection {
         });
         this.onMessage((data) => {
             if (data.title === 'error') {
-                console.error('Server sent out an error.', e);
-                new ErrorMessage(e.payload.errorMessage);
+                console.error('Server sent out an error.', data);
+                new ErrorMessage(data.payload.errorMessage);
             }
         });
         this.onMessage((data) => {
