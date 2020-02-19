@@ -13,15 +13,16 @@ class Room {
         this.results = [];
         this.currentRound = 0;
 
-        this.connection.onMessage((message) => {this.messageListener(data);});
+        this.connection.onMessage((message) => {this.messageListener(message);});
     }
 
     getCurrentRound() {
         return this.results[this.currentRound];
     }
 
-    messageListener(data) {
-        if (message.title === 'vote' && message.payload.roomId === this.name) {
+    messageListener(message) {
+        if (message.title === 'voteChange' && message.payload.roomId === this.name) {
+            console.log("STIGAO NOVI VOTE SPOLJA!!!", message);
             this.addVote(new Vote(data.payload.name, data.payload.value));
         }
     }
