@@ -13,7 +13,7 @@ class RoomWindow {
     bootstrapDom() {
         this.main = document.querySelector('main');
         this.roomWindow = this.main.querySelector('#room-window');
-        this.userName = this.main.querySelector('.user-name');
+        this.userName = this.main.querySelector('.user-name span');
         this.roomTitle = this.roomWindow.querySelector('h1 span');
         this.roundNumber = this.roomWindow.querySelector('.round span');
         this.votingButtonsContainer = this.roomWindow.querySelector('.voting-buttons');
