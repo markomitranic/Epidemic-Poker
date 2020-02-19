@@ -41,7 +41,7 @@ class Room {
     }
 
     leave() {
-
+        this.connection.send(new Message('leave', {roomId: this.name}));
     }
 
     initialState(state) {

@@ -23,12 +23,12 @@ class NavigationPanel {
         if (this.roomList.length) {
             for (let i = 0; i < this.roomList.length; i++) {
                 if (this.roomList[i].roomObject === room) {
-                    return;
+                    return this.roomList[i];
                 }
             }
         }
 
-        this.createNewRoomElement(room);
+        return this.createNewRoomElement(room);
     }
 
     createNewRoomElement(room) {
@@ -36,12 +36,13 @@ class NavigationPanel {
         newItem.innerText = room.name.charAt(0).toUpperCase() + room.name.slice(1);
         newItem.roomObject = room;
         newItem.addEventListener('click', () => {
-            this.roomWindow.show(room);
+            this.roomWindow.show(room, newItem);
             this.panelManager.closeAll();
         });
         this.roomList.push(newItem);
         //listener
         this.roomListContainer.appendChild(newItem);
+        return newItem;
     }
 
     removeRoom(room) {

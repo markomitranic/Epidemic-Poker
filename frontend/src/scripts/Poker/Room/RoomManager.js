@@ -67,8 +67,8 @@ class RoomManager {
                     }
                 }
                 room.initialState(data.payload);
-                this.navigationPanel.addRoom(room);
-                this.roomWindow.show(room);
+                const navigationLink = this.navigationPanel.addRoom(room);
+                this.roomWindow.show(room, navigationLink);
             },
             this
         );

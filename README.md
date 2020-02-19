@@ -42,6 +42,7 @@ Talking protocol is based on tuples with the first member describing the name of
 *Client says:*
 - `{title:'create', payload: { 'type': (string) }}` Create a new room.
 - `{title:'join', payload: { 'roomId': (string) }}` Ask to join a specific room.
+- `{title:'leave', payload: { 'roomId': (string) }}` Leave a room.
 - `{title:'vote', {roomId: (string), value: (float)}` Cast a vote to the room.
 - `{title:'coffeeBreak', {roomId: (string), clientName: (string)}` A room member has asked everyone to go on a coffee break.
 

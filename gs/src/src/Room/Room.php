@@ -45,6 +45,11 @@ class Room
         $this->clients[$client->getId()] = $client;
     }
 
+    public function leave(Client $client): void
+    {
+        unset($this->clients[$client->getId()]);
+    }
+
     /**
      * @return Client[]
      */

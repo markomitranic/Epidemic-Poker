@@ -25,25 +25,36 @@ class RoomWindow {
         this.visualControls = new VisualControls(this.roomWindow.querySelector('#visual'));
     }
 
-    show(room) {
-        this.populateData(room);
+    show(room, navigationLink) {
+        this.populateData(room, navigationLink);
     }
 
-    populateData(room) {
+    populateData(room, navigationLink) {
+        this.room = room;
+        this.navigationLink = navigationLink;
         this.userName.innerText = room.clientName;
         this.roomTitle.innerText = room.name.charAt(0).toUpperCase() + room.name.slice(1);
         this.roundNumber.innerText = room.currentRound + 1;
         this.voteControls.initialize(room);
         this.shareControls.populate(room);
         this.main.classList.add('room-open');
-        this.userActions.coffeeButton.room = room;
 
+        this.userActions.coffeeButton.context = this;
         this.userActions.coffeeButton.removeEventListener('click', this.askForCoffee);
         this.userActions.coffeeButton.addEventListener('click', this.askForCoffee);
+        this.userActions.leaveButton.context = this;
+        this.userActions.leaveButton.removeEventListener('click', this.leaveRoom);
+        this.userActions.leaveButton.addEventListener('click', this.leaveRoom);
     }
 
     askForCoffee() {
-        this.room.coffeeBreak();
+        this.context.room.coffeeBreak();
+    }
+
+    leaveRoom() {
+        this.context.room.leave();
+        this.context.main.classList.remove('room-open');
+        this.context.navigationLink.remove();
     }
 
 }

@@ -27,7 +27,9 @@ class Connection {
         };
         this.socket.onmessage = function (event) {
             if (this.connection.observers.open.length) {
-                this.connection.triggerObservers('open', JSON.parse(event.data));
+                if (this.connection.openEvent !== null && this.connection.authorized) {
+                    this.connection.triggerObservers('open', JSON.parse(event.data));
+                }
             }
             this.connection.triggerObservers('message', JSON.parse(event.data));
         };
@@ -46,7 +48,7 @@ class Connection {
 
     send(message) {
         if (this.openEvent === null || !this.authorized) {
-            this.onOpen(() => {
+            this.addObserver('open', () => {
                 console.debug('Sending message', message);
                 this.socket.send(JSON.stringify(message));
             });

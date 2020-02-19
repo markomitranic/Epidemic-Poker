@@ -23,7 +23,7 @@ class RedirectService {
         const addressValue = Cookie.read('automaticallyJoinRoom');
         if (addressValue) {
             const address  = JSON.parse(addressValue);
-            // Cookie.erase('automaticallyJoinRoom');
+            Cookie.erase('automaticallyJoinRoom');
             this.roomManager.join(address.serverName, address.roomName);
         }
     }
