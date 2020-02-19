@@ -127,6 +127,12 @@ class Connection {
             new ErrorMessage('Unable to connect to server.');
         });
         this.onMessage((data) => {
+            if (data.title === 'error') {
+                console.error('Server sent out an error.', e);
+                new ErrorMessage(e.payload.errorMessage);
+            }
+        });
+        this.onMessage((data) => {
             if (data.title === 'sessionChange') {
                 this.authorized = true;
                 Cookie.create(data.payload.cookieName, data.payload.token, 1);
