@@ -20,7 +20,20 @@ services:
       context: ./gs
       target: prod
       args:
-        - SHARD_NAME=1
+        - SHARD_NAME=kyoto
+        - JWT_SECRET="super.super.secret"
+    networks:
+      - epidemicpoker
+
+
+  epidemicpoker_gs2:
+    container_name: epidemicpoker_gs2
+    restart: always
+    build:
+      context: ./gs
+      target: prod
+      args:
+        - SHARD_NAME=minsk
         - JWT_SECRET="super.super.secret"
     networks:
       - epidemicpoker

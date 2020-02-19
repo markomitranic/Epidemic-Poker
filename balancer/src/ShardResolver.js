@@ -4,9 +4,7 @@ class ShardResolver {
 
     constructor() {
         this.nextShard = 0;
-        this.shardsMap = [
-            '1',
-        ];
+        this.shardsMap = ['kyoto', 'minsk'];
     }
 
     resolve(request, response) {
