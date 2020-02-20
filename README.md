@@ -25,10 +25,7 @@ The first thing to do is to copy and customize environment values in `.env.dist`
 
 With nothing out of the ordinary, a simple `docker-compose build && docker-compose up` should spin everything up. For ease of use, i have attached a `./deploy.sh` as well as `./deploy_dev.sh` script. Once up and running, the application is awailable at port 8080, and ready to be proxied further.
 
-## Service Architecture
-TBA...
-
-### Talk Protocol
+## Service Architecture && Talk Protocol
 Talking protocol is based on tuples with the first member describing the name of the message (similar to route) and the second the body of the message.
 
 *GS says:*
@@ -59,3 +56,16 @@ This can also be edited on-the-fly by manual changes to `/etc/nginx/conf.d/shard
 
 At a later date, a more appropriate load balancer may be added easily, since nginx does not support hot ENV var replacement.
 Alternatively, `envsubst` may be used as a future prospect, if hot-scaling is not needed.
+
+## Known issues
+
+### Bugs
+- After room rejoin (pare reload for example), the vote button is not selected, if i have already voted.
+- In certain scenarios (multiple chrome windows open), GS seems to stop sending updates to the clients. It seems to be related to the way reactPHP handles socket operation batching, although i am way too sleepy to deal with that.
+
+### Features
+- Scaling and load balancing is a pain. It can be done via env vars, i am sure of it.
+- GS already supports it. Front does not.
+- Navigation list of joined rooms should be persisted in localstorage or cookie.
+- Re-check 12-factor methodology, we may have strayed off.
+- Frontend needs a smoother loading animation
