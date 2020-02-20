@@ -22,3 +22,5 @@ if (window.location.pathname.startsWith('/join/')) {
 } else {
     redirectService.checkForAutojoin();
 }
+
+roomManager.create({type: 'emoji'});

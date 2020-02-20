@@ -3,6 +3,7 @@
 import Room from "./Room";
 import ConnectionManager from "../ConnectionManager";
 import Message from "../Message";
+import RoomTypeResolver from "./Type/RoomTypeResolver";
 
 class RoomManager {
 
@@ -11,6 +12,7 @@ class RoomManager {
         this.navigationPanel = navigationPanel;
         this.roomWindow = roomWindow;
         this.connectionManager = new ConnectionManager();
+        this.roomTypeResolver = new RoomTypeResolver();
     }
 
     join(serverName, roomName) {
@@ -44,7 +46,7 @@ class RoomManager {
     }
 
     createRoomObject(roomName, connection) {
-        this.rooms[roomName] = new Room(roomName, connection);
+        this.rooms[roomName] = new Room(roomName, connection, this.roomTypeResolver);
         return this.rooms[roomName];
     }
 

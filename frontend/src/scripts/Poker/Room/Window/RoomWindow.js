@@ -31,6 +31,7 @@ class RoomWindow {
 
     populateData(room, navigationLink) {
         this.room = room;
+        this.room.visualControls = this.visualControls;
         this.navigationLink = navigationLink;
         this.userName.innerText = room.clientName;
         this.roomTitle.innerText = room.name.charAt(0).toUpperCase() + room.name.slice(1);
@@ -45,6 +46,8 @@ class RoomWindow {
         this.userActions.leaveButton.context = this;
         this.userActions.leaveButton.removeEventListener('click', this.leaveRoom);
         this.userActions.leaveButton.addEventListener('click', this.leaveRoom);
+
+        room.visualControls.populate(room);
     }
 
     askForCoffee() {

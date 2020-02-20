@@ -1,37 +1,21 @@
 'use strict';
 
-import float from "../Type/Float";
-import fibonacci from "../Type/Fibbonacci";
-import poker from "../Type/Poker";
-import natural from "../Type/Natural";
-import tshirt from "../Type/Tshirt";
-import emoji from "../Type/Emoji";
 import Vote from "../Vote";
+import float from "../Type/Float";
 
 class VoteControls {
 
     constructor(container) {
-        this.types = {
-            poker: poker,
-            fibonacci: fibonacci,
-            natural: natural,
-            tshirt: tshirt,
-            emoji: emoji,
-            float: float,
-        };
-
         this.container = container;
-        this.type = this.types.float;
+        this.type = float;
         this.room = null;
         this.currentResult = document.querySelector('#room-window p.result');
     }
 
     initialize(room) {
         this.container.textContent = '';
-        if (this.types.hasOwnProperty(room.type)) {
-            this.type = this.types[room.type];
-        }
         this.room = room;
+        this.type = room.type;
         this.updateMedianScore();
         this.createButtons();
     }
@@ -49,7 +33,6 @@ class VoteControls {
         buttonElement.dataset.value = button.value;
         buttonElement.addEventListener('click', (e) => {
             this.room.addVote(new Vote(this.room.clientName, buttonElement.dataset.value));
-
             e.target.parentNode.querySelectorAll('.selected').forEach((element) => {
                 element.classList.remove('selected');
             });

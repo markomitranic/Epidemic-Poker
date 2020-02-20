@@ -6,13 +6,15 @@ import Vote from "./Vote";
 
 class Room {
 
-    constructor(name, connection) {
+    constructor(name, connection, roomTypeResolver) {
         this.name = name;
         this.clientName = '👎';
         this.connection = connection;
-        this.type = 'default';
+        this.type = null;
         this.results = [];
         this.currentRound = 0;
+        this.visualControls = null;
+        this.roomTypeResolver = roomTypeResolver;
 
         this.connection.onMessage((message) => {this.messageListener(message);});
     }
@@ -23,7 +25,7 @@ class Room {
 
     messageListener(message) {
         if (message.title === 'voteChange' && message.payload.roomId === this.name) {
-            this.addVote(new Vote(data.payload.name, data.payload.value));
+            this.addVote(new Vote(message.payload.name, message.payload.value));
         }
     }
 
@@ -33,6 +35,7 @@ class Room {
 
     addVote(vote) {
         this.getCurrentRound().addVote(vote);
+        this.visualControls.populate(this);
         this.connection.send(new Message('vote', {roomId: this.name, value: vote.value}));
     }
 
@@ -46,7 +49,7 @@ class Room {
 
     initialState(state) {
         this.currentRound = parseInt(state.currentRound);
-        this.type = state.type;
+        this.type = this.roomTypeResolver.resolve(state.type);
         this.clientName = state.clientName;
 
         state.results.forEach((round) => {
