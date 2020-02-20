@@ -17,10 +17,6 @@ COPY conf/php.ini /usr/local/etc/php/conf.d/z-custom.ini
 EXPOSE 8000
 ENV LISTEN_PORT=8000
 ENV LOGGING_LEVEL=error
-ARG SHARD_NAME
-ENV SHARD_NAME=$SHARD_NAME
-ARG JWT_SECRET
-ENV JWT_SECRET=$JWT_SECRET
 WORKDIR /app/epidemicpoker/
 CMD ["php", "index.php"]
 

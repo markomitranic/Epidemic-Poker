@@ -19,9 +19,9 @@ services:
     build:
       context: ./gs
       target: prod
-      args:
-        - SHARD_NAME=kyoto
-        - JWT_SECRET="super.super.secret"
+    environment:
+      - SHARD_NAME=kyoto
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - epidemicpoker
 
@@ -32,9 +32,9 @@ services:
     build:
       context: ./gs
       target: prod
-      args:
-        - SHARD_NAME=minsk
-        - JWT_SECRET="super.super.secret"
+    environment:
+      - SHARD_NAME=minsk
+      - JWT_SECRET=${JWT_SECRET}
     networks:
       - epidemicpoker
 
