@@ -9,7 +9,6 @@ import Create from "./Poker/Create";
 import roomWindow from "./Poker/Room/Window/RoomWindow";
 import RedirectService from "./RedirectService";
 
-
 const panelManager = new PanelManager();
 const navigationPanel = new NavigationPanel(panelManager, roomWindow);
 const roomManager = new RoomManager(navigationPanel, roomWindow);
@@ -22,5 +21,3 @@ if (window.location.pathname.startsWith('/join/')) {
 } else {
     redirectService.checkForAutojoin();
 }
-
-roomManager.create({type: 'emoji'});
