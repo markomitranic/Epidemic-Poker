@@ -32,7 +32,7 @@ class VoteControls {
         buttonElement.innerText = button.title;
         buttonElement.dataset.value = button.value;
         buttonElement.addEventListener('click', (e) => {
-            this.room.addVote(new Vote(this.room.clientName, buttonElement.dataset.value));
+            this.room.addMyVote(new Vote(this.room.clientName, buttonElement.dataset.value));
             e.target.parentNode.querySelectorAll('.selected').forEach((element) => {
                 element.classList.remove('selected');
             });

@@ -33,10 +33,14 @@ class Room {
         this.connection.send(new Message('join', {roomId: this.name}));
     }
 
+    addMyVote(vote) {
+        this.addVote(vote);
+        this.connection.send(new Message('vote', {roomId: this.name, value: vote.value}));
+    }
+
     addVote(vote) {
         this.getCurrentRound().addVote(vote);
         this.visualControls.populate(this);
-        this.connection.send(new Message('vote', {roomId: this.name, value: vote.value}));
     }
 
     coffeeBreak() {
