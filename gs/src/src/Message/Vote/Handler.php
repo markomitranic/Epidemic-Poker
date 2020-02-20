@@ -74,7 +74,7 @@ class Handler implements \App\Message\Handler
         $client->getClient()->getConnection()->send(new VoteChangeMessage(
             $roomName,
             $vote->getValue(),
-            $client->getName()
+            $vote->getClient()->getName()
         ));
     }
 

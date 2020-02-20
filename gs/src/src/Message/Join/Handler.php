@@ -36,10 +36,10 @@ class Handler implements \App\Message\Handler
 
         try {
             $room = $this->rooms->getByName(strtolower($payload->getRoomId()));
-            $room->join($connection->getClient());
+            $roomClient = $room->join($connection->getClient());
             $connection->send(new InitialStateMessage(
                 $room->getName(),
-                $connection->getClient()->getName(),
+                $roomClient->getName(),
                 $room->getType(),
                 $room->getCurrentRoundIndex(),
                 $room->getRounds()

@@ -50,9 +50,13 @@ class Room
      */
     public function join(Client $client): RoomClient
     {
-        $roomClient = new RoomClient($client, $this->getUniqueClientName());
-        $this->clients[$client->getId()] = $roomClient;
-        return $roomClient;
+        try {
+            return $this->findClient($client);
+        } catch (\Exception $e) {
+            $roomClient = new RoomClient($client, $this->getUniqueClientName());
+            $this->clients[$client->getId()] = $roomClient;
+            return $roomClient;
+        }
     }
 
     public function leave(RoomClient $client): void
@@ -67,10 +71,8 @@ class Room
      */
     public function findClient(Client $client): RoomClient
     {
-        foreach ($this->clients as $roomClient) {
-            if ($roomClient->getClient() === $client) {
-                return $roomClient;
-            }
+        if (array_key_exists($client->getId(), $this->clients)) {
+            return $this->clients[$client->getId()];
         }
         throw new \Exception('The client cannot be found');
     }
